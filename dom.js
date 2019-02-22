@@ -3,7 +3,7 @@ class Dom{
 
 	}
 
-	findClass(className){
+	findByClass(className){
 		return document.querySelector(className);
 	}
 
@@ -11,9 +11,8 @@ class Dom{
 		return document.createElement(type);
 	}
 
-	addChild(child){
-		let field = document.querySelector('.field');
-		field.appendChild(child);
+	addChild(parent, child){
+		parent.appendChild(child);
 	}
 
 	setHTML(parent, html){
