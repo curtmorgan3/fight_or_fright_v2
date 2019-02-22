@@ -7,8 +7,8 @@ class Dom{
 		return document.querySelector(className);
 	}
 
-	createEl(type){
-		return document.createElement(type);
+	createEl(){
+		return document.createElement('div');
 	}
 
 	addChild(parent, child){

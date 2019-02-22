@@ -4,4 +4,4 @@ let Render = require('./render.js');
 let helper = new Helper();
 let render = new Render();
 
-render.floor();
+render.playArea();

@@ -1,4 +1,58 @@
 .floor{
 	width: 100vw;
 	height: 100vh;
+	display: grid;
+	grid-template-columns: 15% 70% 15%;
+	grid-template-rows: 15% 60% 25%;
+}
+
+.backdrop{
+	grid-row: 2;
+	grid-column: 2;
+	height: 100%;
+	width: auto;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-image: url("images/backdrop.png");
+}
+
+.playerRow{
+	grid-row:3;
+	grid-column: 1 / span 3;
+	height: 100%;
+	width: 100%;
+	background-color: #3E1C33;
+	opacity: 0.7;
+	margin-top: 2px;
+}
+
+.actions{
+	grid-row: 2;
+	grid-column: 1;
+	height: 100%;
+	width: 100%;
+}
+
+.inventory{
+	grid-row: 2;
+	grid-column: 3;
+	height: 100%;
+	width: 100%;
+}
+
+.order{
+	grid-row: 1;
+	grid-column: 1 / span 3;
+	height: 98%;
+	width: 100%;
+	background-color: #3E1C33;
+	opacity: 0.7;
+}
+
+/* Media Queries */
+@media only screen and (max-width: 1024px){
+	.backdrop{
+		background-color: grey;
+		background-image: none;
+	}
 }
