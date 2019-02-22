@@ -11,6 +11,14 @@ class Dom{
 		return document.createElement('div');
 	}
 
+	setClass(parent, className){
+		parent.className = `${className}`;
+	}
+
+	setBackground(parent, image){
+		parent.style.backgroundImage = `url(images/${image}.png)`;
+	}
+
 	addChild(parent, child){
 		parent.appendChild(child);
 	}
@@ -19,17 +27,11 @@ class Dom{
 		parent.innerHTML = `${html}`;
 	}
 
-	setBackground(parent, image){
-		parent.style.backgroundImage = `url(images/${image}.png)`;
-	}
-
 	addListener(parent, type, action){
 		return parent.addEventListener(`${type}`, action);
 	}
 
-	setClass(parent, className){
-		parent.className = `${className}`;
-	}
+
 }
 
 module.exports = Dom
