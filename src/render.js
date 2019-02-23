@@ -1,4 +1,6 @@
 let Dom = require('./dom.js');
+import {chooseCharacter} from './app.js';
+
 let dom = new Dom();
 
 class Render{
@@ -95,14 +97,14 @@ class Render{
 			dom.setClass(sprite, 'portrait');
 			sprite.id = costume;
 			dom.addChild(welcomeCharacters, sprite);
-			dom.addListener(sprite, 'click', ()=> this.chooseCharacter(costume));
 			dom.addListener(sprite, 'mouseover', ()=> this.describeCostume(costume));
 			dom.addListener(sprite, 'mouseout', this.deleteDescription);
+			dom.addListener(sprite, 'click', ()=> this.select(costume));
 		})
 	}
 
-	chooseCharacter(costume){
-		console.log("chooseCharacter", costume);
+	select(costume){
+		chooseCharacter(costume);
 	}
 
 	deleteDescription(){

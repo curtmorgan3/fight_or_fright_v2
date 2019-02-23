@@ -123,4 +123,7 @@
 		display: block;
 		overflow: scroll;
 	}
+	.welcomeDescription{
+		font-size: 55px;
+	}
 }
