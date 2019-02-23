@@ -4,7 +4,7 @@ class Helper{
 		return Math.floor(Math.random() * Math.floor(n) + 1);
 	}
 
-	
+
 
 }
 module.exports = Helper

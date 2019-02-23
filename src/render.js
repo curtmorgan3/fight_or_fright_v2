@@ -117,22 +117,22 @@ class Render{
 		switch(costume){
 			case 'knight':
 				dom.setText(description,
-					`Knights are strong, but all that armor makes them slow! \n +4 Strength, -2 Speed`
+					`Knights are strong, but all that armor makes them slow! \n +2 Strength, -2 Speed`
 				);
 			break;
 			case 'rogue':
 				dom.setText(description,
-					`Rogues are sneaky, but aren't the best at hitting their targets. \n +4 Speed, -2 Dexterity`
+					`Rogues are sneaky, but aren't the best at hitting their targets. \n +2 Speed, -2 Dexterity`
 				);
 			break;
 			case 'priest':
 				dom.setText(description,
-					`Priests channel a lot of energy from...somewhere. \n +4 Fortitude, -2 Strength`
+					`Priests channel a lot of energy from...somewhere. \n +2 Fortitude, -2 Strength`
 				);
 			break;
 			case 'ninja':
 				dom.setText(description,
-					`Ninjas almost always hit their target, but they don't like to wear armor.\n +4 Dexterity, -2 Fortitude`
+					`Ninjas almost always hit their target, but they don't like to wear armor.\n +2 Dexterity, -2 Fortitude`
 				);
 			break;
 			case 'gambler':
