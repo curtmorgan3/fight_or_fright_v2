@@ -67,6 +67,17 @@
 	color: #F6921E;
 }
 
+
+/* Sprites */
+.portrait{
+	margin: auto;
+  max-height: 75px;
+  max-width: 75px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  text-align: center;
+}
+
 /* Media Queries */
 @media only screen and (max-width: 1024px){
 	.backdrop{
