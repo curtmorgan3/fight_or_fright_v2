@@ -1,3 +1,8 @@
+*{
+  font-family: 'Amatic SC', cursive;
+  font-size:25px;
+}
+
 .floor{
 	width: 100vw;
 	height: 100vh;
