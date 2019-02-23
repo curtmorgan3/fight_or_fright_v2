@@ -7,7 +7,7 @@
 	width: 100vw;
 	height: 100vh;
 	display: grid;
-	grid-template-columns: 15% 70% 15%;
+	grid-template-columns: 10% 80% 10%;
 	grid-template-rows: 15% 60% 25%;
 }
 
@@ -61,27 +61,66 @@
 
 /* Welcome */
 .welcome{
+	display: grid;
+	grid-template-columns: 25% 30% 45%;
+	height: 100%;
+	width: 100%;
+	justify-content: center;
+	align-items: center;
+}
+
+.welcomeTitle{
 	text-align: center;
 	justify-content: flex-start;
 	font-size: 40px;
 	color: #F6921E;
+	marign: 5px;
 }
-
+.welcomeCharacters{
+	display: flex;
+	grid-column: 2;
+	margin: 5px;
+}
+.welcomeDescription{
+	grid-column: 3;
+	color: #F6921E;
+	margin: 5px;
+}
 
 /* Sprites */
 .portrait{
 	margin: auto;
-  max-height: 75px;
-  max-width: 75px;
+  height: 75px;
+  width: 75px;
   background-size: contain;
   background-repeat: no-repeat;
   text-align: center;
 }
+.portrait:hover{
+	height: 100px;
+	width: 100px;
+}
+
 
 /* Media Queries */
 @media only screen and (max-width: 1024px){
 	.backdrop{
 		background-color: grey;
 		background-image: none;
+	}
+	.welcomeTitle > *{
+		font-size: 70px;
+	}
+	.portrait{
+		height: 175px;
+		width: 175px;
+	}
+	.portrait:hover{
+		height: 200px;
+		width: 200px;
+	}
+	.welcomeCharacters{
+		display: block;
+		overflow: scroll;
 	}
 }

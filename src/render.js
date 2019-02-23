@@ -60,36 +60,85 @@ class Render{
 
 	welcome(){
 		let backdrop = dom.findByClass('.backdrop');
+		dom.setBackgroundColor(backdrop, '#423A41');
 		let welcome = dom.createEl();
 		dom.setClass(welcome, 'welcome');
 		dom.addChild(backdrop, welcome);
-		dom.setHTML(welcome,
-			`<h2>Fight or Fright</h2>
+
+		let title = dom.createEl();
+		dom.setClass(title, 'welcomeTitle');
+		dom.addChild(welcome, title);
+		dom.setHTML(title,
+			`<h2>Fight or Fright!</h2>
 			 <h3>Choose your character</h3>
 			`
 		);
+
+		let characters = dom.createEl();
+		dom.setClass(characters, 'welcomeCharacters');
+		dom.addChild(welcome, characters);
+
+		let description = dom.createEl();
+		dom.setClass(description, 'welcomeDescription');
+		dom.addChild(welcome, description);
+
 		this.characterSelect();
 
 	}
 
 	characterSelect(){
+		let welcomeCharacters = dom.findByClass('.welcomeCharacters');
 		let costumes = ['knight', 'rogue', 'priest', 'ninja', 'gambler'];
-		costumes.forEach(costume, ()=>{
+		costumes.forEach(costume =>{
 			let sprite = dom.createEl();
 			dom.setBackground(sprite, costume);
 			dom.setClass(sprite, 'portrait');
 			sprite.id = costume;
-			// dom.addListener(sprite, 'click', this.chooseCharacter);
-			// dom.addListener(sprite, 'mouseover', this.describeCostume(costume));
-
+			dom.addChild(welcomeCharacters, sprite);
+			dom.addListener(sprite, 'click', ()=> this.chooseCharacter(costume));
+			dom.addListener(sprite, 'mouseover', ()=> this.describeCostume(costume));
+			dom.addListener(sprite, 'mouseout', this.deleteDescription);
 		})
 	}
 
-	chooseCharacter(){
-		console.log("chooseCharacter");
+	chooseCharacter(costume){
+		console.log("chooseCharacter", costume);
 	}
+
+	deleteDescription(){
+		let description = dom.findByClass('.welcomeDescription');
+		dom.setText(description, '');
+	}
+
 	describeCostume(costume){
-		console.log(costume);
+		let description = dom.findByClass('.welcomeDescription');
+		switch(costume){
+			case 'knight':
+				dom.setText(description,
+					`Knights are strong, but all that armor makes them slow! \n +4 Strength, -2 Speed`
+				);
+			break;
+			case 'rogue':
+				dom.setText(description,
+					`Rogues are sneaky, but aren't the best at hitting their targets. \n +4 Speed, -2 Dexterity`
+				);
+			break;
+			case 'priest':
+				dom.setText(description,
+					`Priests channel a lot of energy from...somewhere. \n +4 Fortitude, -2 Strength`
+				);
+			break;
+			case 'ninja':
+				dom.setText(description,
+					`Ninjas almost always hit their target, but they don't like to wear armor.\n +4 Dexterity, -2 Fortitude`
+				);
+			break;
+			case 'gambler':
+				dom.setText(description,
+					`Gamblers don't need anything but the favor of ol' Lady Luck. \n +4 Luck`
+				);
+			break;
+		}
 	}
 
 }
