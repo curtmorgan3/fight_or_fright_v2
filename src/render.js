@@ -1,9 +1,10 @@
-let Dom = require('./dom.js');
+// let Dom = require('./dom.js');
+import Dom from './dom.js';
 import {chooseCharacter} from './app.js';
 
 let dom = new Dom();
 
-class Render{
+export default class Render{
 
 	// Play Area
 	floor(){
@@ -97,9 +98,9 @@ class Render{
 			dom.setClass(sprite, 'portrait');
 			sprite.id = costume;
 			dom.addChild(welcomeCharacters, sprite);
-			dom.addListener(sprite, 'mouseover', ()=> this.describeCostume(costume));
+			dom.addListener(sprite, 'mouseover', () => this.describeCostume(costume));
 			dom.addListener(sprite, 'mouseout', this.deleteDescription);
-			dom.addListener(sprite, 'click', ()=> this.select(costume));
+			dom.addListener(sprite, 'click', () => this.select(costume));
 		})
 	}
 
@@ -143,6 +144,11 @@ class Render{
 		}
 	}
 
-}
+	name(){
+		// let welcome = dom.findByClass('welcome');
+		// dom.clear(welcome);
+		let button = document.createElement('button');
+		button.addEventListener('click', console.log(player));
+	}
 
-module.exports = Render
+}

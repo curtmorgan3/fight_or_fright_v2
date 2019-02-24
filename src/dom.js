@@ -1,4 +1,4 @@
-class Dom{
+export default class Dom{
 	constructor(){
 
 	}
@@ -29,6 +29,11 @@ class Dom{
 	removeChild(parent, child){
 		parent.removeChild(child);
 	}
+	clear(parent){
+		while(parent.firstChild){
+			parent.removeChild(parent.firstChild);
+		}
+	}
 
 	setHTML(parent, html){
 		parent.innerHTML = `${html}`;
@@ -42,5 +47,3 @@ class Dom{
 
 
 }
-
-module.exports = Dom

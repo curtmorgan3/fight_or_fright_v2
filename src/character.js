@@ -1,7 +1,7 @@
 import Helper from './helper.js';
 let helper = new Helper();
 
-class Character{
+export default class Character{
 	constructor(type){
 		this.type = type;
 		this.level = 1;
@@ -81,5 +81,3 @@ class Character{
 	}
 
 }
-
-module.exports = Character;

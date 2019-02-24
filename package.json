@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npx babel src --out-dir lib && browserify ./lib/app.js -o ./lib/bundle.js -t [babelify --presets [@babel/core @babel/preset-env @babel/polyfill]]"
+    "build": "npx babel src --out-dir dist && npx webpack"
   },
   "author": "",
   "license": "ISC",
@@ -14,6 +13,14 @@
     "@babel/core": "^7.3.3",
     "@babel/polyfill": "^7.2.5",
     "@babel/preset-env": "^7.3.1",
-    "babelify": "^10.0.0"
+    "@babel/register": "^7.0.0",
+    "babel-loader": "^8.0.5",
+    "css-loader": "^2.1.0",
+    "style-loader": "^0.23.1",
+    "webpack-dev-server": "^3.2.0"
+  },
+  "devDependencies": {
+    "webpack": "^4.29.5",
+    "webpack-cli": "^3.2.3"
   }
 }
