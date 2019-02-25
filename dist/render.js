@@ -1,12 +1,7 @@
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-// let Dom = require('./dom.js');
+import _classCallCheck from "@babel/runtime/helpers/classCallCheck";
+import _createClass from "@babel/runtime/helpers/createClass";
 import Dom from './dom.js';
-import { chooseCharacter } from './app.js';
+import { chooseCharacter, chooseName, startGame } from './app.js';
 var dom = new Dom();
 
 var Render =
@@ -159,11 +154,48 @@ function () {
     }
   }, {
     key: "name",
-    value: function name() {
-      // let welcome = dom.findByClass('welcome');
-      // dom.clear(welcome);
-      var button = document.createElement('button');
-      button.addEventListener('click', console.log(player));
+    value: function name(playerType) {
+      var welcome = dom.findByClass('.welcome');
+      dom.clear(welcome);
+      var setNameWrapper = dom.createEl();
+      dom.setClass(setNameWrapper, 'setNameWrapper');
+      dom.addChild(welcome, setNameWrapper);
+      var nameMsg = dom.createEl();
+      dom.setClass(nameMsg, 'nameMsg');
+      dom.setText(nameMsg, "What is your name, ".concat(playerType, "?"));
+      dom.addChild(setNameWrapper, nameMsg);
+      var nameInputField = dom.createField();
+      dom.setClass(nameInputField, 'nameInputField');
+      dom.addChild(setNameWrapper, nameInputField);
+      var nameSubmit = dom.createButton('Submit');
+      dom.setClass(nameSubmit, 'nameSubmit');
+      dom.addChild(setNameWrapper, nameSubmit);
+      dom.addListener(nameSubmit, 'click', function () {
+        return chooseName(nameInputField.value);
+      });
+    } // Prepare for horror!
+
+  }, {
+    key: "prepare",
+    value: function prepare(player, level) {
+      var welcome = dom.findByClass('.welcome');
+      dom.clear(welcome);
+      var prepareWrapper = dom.createEl();
+      dom.setClass(prepareWrapper, 'prepareWrapper');
+      dom.addChild(welcome, prepareWrapper);
+      var prepare = dom.createEl();
+      dom.setText(prepare, 'Prepare for Horror!');
+      dom.setClass(prepare, 'prepare');
+      dom.addChild(prepareWrapper, prepare);
+      var stats = dom.createEl();
+      dom.setClass(stats, 'prepareStats');
+      dom.addChild(prepareWrapper, stats);
+      dom.setHTML(stats, "\n\t\t\t\t<h2>".concat(player.name, "</h2>\n\t\t\t\t<h3>Floor ").concat(level, "</h3>\n\t\t\t"));
+      var submit = dom.createButton('Enter...');
+      dom.addListener(submit, 'click', function () {
+        return startGame();
+      });
+      dom.addChild(prepareWrapper, submit);
     }
   }]);
 

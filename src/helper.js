@@ -1,10 +1,9 @@
-class Helper{
+export default class Helper{
 
-	randNumber(n){
+	static randNumber(n){
 		return Math.floor(Math.random() * Math.floor(n) + 1);
 	}
 
 
 
 }
-module.exports = Helper

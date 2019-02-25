@@ -1,11 +1,6 @@
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
+import _classCallCheck from "@babel/runtime/helpers/classCallCheck";
+import _createClass from "@babel/runtime/helpers/createClass";
 import Helper from './helper.js';
-var helper = new Helper();
 
 var Character =
 /*#__PURE__*/
@@ -23,7 +18,8 @@ function () {
     this.weaponQual = 'Poor';
     this.hp = this.attributes.maxHP;
     this.name = '';
-  }
+  } // Static Methods
+
 
   _createClass(Character, [{
     key: "setAtt",
@@ -32,7 +28,7 @@ function () {
       var score = 0;
 
       for (var i = 0; i < 4; i++) {
-        sum += Math.floor(helper.randNumber(5));
+        sum += Math.floor(Helper.randNumber(5));
       }
 
       if (score < 2) {
@@ -103,7 +99,8 @@ function () {
       attributes.initiative = this.getModifier(attributes.speed) + 5;
       attributes.maxHP = attributes.maxHP + 10 + this.getModifier(attributes.fort);
       return attributes;
-    }
+    } // Instance Methods
+
   }]);
 
   return Character;

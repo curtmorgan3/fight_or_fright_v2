@@ -1,5 +1,4 @@
 import Helper from './helper.js';
-let helper = new Helper();
 
 export default class Character{
 	constructor(type){
@@ -15,11 +14,13 @@ export default class Character{
 		this.name = '';
 	}
 
+	// Static Methods
+
 	setAtt(){
   	let sum = 0;
   	let score = 0;
   	for(let i = 0; i<4; i++){
-    	sum += Math.floor(helper.randNumber(5));
+    	sum += Math.floor(Helper.randNumber(5));
   	}
 		if (score  < 2){
 			score = 2;
@@ -79,5 +80,7 @@ export default class Character{
 
 		return attributes;
 	}
+
+	// Instance Methods
 
 }

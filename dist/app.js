@@ -1,14 +1,20 @@
-import Helper from './helper.js';
 import Render from './render.js';
 import Character from './character.js';
-var helper = new Helper();
+import Dom from './dom.js';
 var render = new Render();
+var dom = new Dom();
+var player;
+var level = 1;
 render.playArea();
 render.welcome();
-var player;
 export function chooseCharacter(type) {
-  console.log('choose character');
-  player = new Character(type); // render.name();
-
-  console.log(player);
+  player = new Character(type);
+  render.name(player.type);
+}
+export function chooseName(name) {
+  player.name = name;
+  render.prepare(player, level);
+}
+export function startGame() {
+  console.log('Start Game');
 }

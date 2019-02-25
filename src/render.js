@@ -1,6 +1,5 @@
-// let Dom = require('./dom.js');
 import Dom from './dom.js';
-import {chooseCharacter} from './app.js';
+import {chooseCharacter, chooseName, startGame} from './app.js';
 
 let dom = new Dom();
 
@@ -144,11 +143,59 @@ export default class Render{
 		}
 	}
 
-	name(){
-		// let welcome = dom.findByClass('welcome');
-		// dom.clear(welcome);
-		let button = document.createElement('button');
-		button.addEventListener('click', console.log(player));
+	name(playerType){
+		let welcome = dom.findByClass('.welcome');
+		dom.clear(welcome);
+
+		let setNameWrapper = dom.createEl();
+		dom.setClass(setNameWrapper, 'setNameWrapper');
+		dom.addChild(welcome, setNameWrapper);
+
+		let nameMsg = dom.createEl();
+		dom.setClass(nameMsg, 'nameMsg');
+		dom.setText(nameMsg, `What is your name, ${playerType}?`);
+		dom.addChild(setNameWrapper, nameMsg);
+
+		let nameInputField = dom.createField();
+		dom.setClass(nameInputField, 'nameInputField');
+		dom.addChild(setNameWrapper, nameInputField);
+
+		let nameSubmit = dom.createButton('Submit');
+		dom.setClass(nameSubmit, 'nameSubmit');
+		dom.addChild(setNameWrapper, nameSubmit);
+		dom.addListener(nameSubmit, 'click', ()=> chooseName(nameInputField.value));
+
+	}
+
+	// Prepare for horror!
+
+	prepare(player, level){
+		let welcome = dom.findByClass('.welcome');
+		dom.clear(welcome);
+
+		let prepareWrapper = dom.createEl();
+		dom.setClass(prepareWrapper, 'prepareWrapper');
+		dom.addChild(welcome, prepareWrapper);
+
+		let prepare = dom.createEl();
+		dom.setText(prepare, 'Prepare for Horror!');
+		dom.setClass(prepare, 'prepare');
+		dom.addChild(prepareWrapper, prepare);
+
+		let stats = dom.createEl();
+		dom.setClass(stats, 'prepareStats');
+		dom.addChild(prepareWrapper, stats);
+		dom.setHTML(stats,
+			`
+				<h2>${player.name}</h2>
+				<h3>Floor ${level}</h3>
+			`
+		)
+
+
+		let submit = dom.createButton('Enter...');
+		dom.addListener(submit, 'click', ()=> startGame());
+		dom.addChild(prepareWrapper, submit);
 	}
 
 }

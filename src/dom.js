@@ -45,5 +45,14 @@ export default class Dom{
 		return parent.addEventListener(`${type}`, action);
 	}
 
+	createField(){
+		return document.createElement('input');
+	}
+
+	createButton(text){
+		let button = document.createElement('button');
+		this.setText(button, text);
+		return button;
+	}
 
 }
