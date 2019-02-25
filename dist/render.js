@@ -1,7 +1,7 @@
 import _classCallCheck from "@babel/runtime/helpers/classCallCheck";
 import _createClass from "@babel/runtime/helpers/createClass";
 import Dom from './dom.js';
-import { chooseCharacter, chooseName, startGame } from './app.js';
+import { chooseCharacter, chooseName, startFloor } from './app.js';
 var dom = new Dom();
 
 var Render =
@@ -190,12 +190,60 @@ function () {
       var stats = dom.createEl();
       dom.setClass(stats, 'prepareStats');
       dom.addChild(prepareWrapper, stats);
-      dom.setHTML(stats, "\n\t\t\t\t<h2>".concat(player.name, "</h2>\n\t\t\t\t<h3>Floor ").concat(level, "</h3>\n\t\t\t"));
+      dom.setHTML(stats, "\n\t\t\t\t<h2>".concat(player.name, ", Level ").concat(player.level, " ").concat(player.type, "</h2>\n\t\t\t\t<h3>Strength: ").concat(player.attributes.str, " / Speed: ").concat(player.attributes.speed, " / Dexterity: ").concat(player.attributes.dex, "</h3>\n\t\t\t\t<h3>Fortitude: ").concat(player.attributes.fort, " / Luck: ").concat(player.attributes.luck, " / Max HP: ").concat(player.attributes.maxHP, "</h3>\n\t\t\t\t<h3>Weapon: ").concat(player.weaponType, " / Quality: ").concat(player.weapon, "\n\t\t\t\t<h2>Floor ").concat(level, "</h2>\n\t\t\t"));
       var submit = dom.createButton('Enter...');
-      dom.addListener(submit, 'click', function () {
-        return startGame();
-      });
+      dom.addListener(submit, 'click', startFloor);
       dom.addChild(prepareWrapper, submit);
+    } // Floor
+
+  }, {
+    key: "populatePlayerRow",
+    value: function populatePlayerRow(player) {
+      var playerRow = dom.findByClass('.playerRow');
+      var playerInfoWrapper = dom.createEl();
+      dom.setClass(playerInfoWrapper, 'playerInfoWrapper');
+      dom.addChild(playerRow, playerInfoWrapper);
+      var playerHealth = dom.createEl();
+      dom.setClass(playerHealth, 'playerRowPlayerHealth');
+      dom.setHTML(playerHealth, "\n\t\t\t\t<h3>".concat(player.hp, "/").concat(player.attributes.maxHP, "</h3>\n\t\t\t"));
+      dom.addChild(playerInfoWrapper, playerHealth);
+      var playerStats = dom.createEl();
+      dom.setClass(playerStats, 'playerRowPlayerStats');
+      dom.setHTML(playerStats, "\n\t\t\t\t<h3>Strength: ".concat(player.attributes.str, " Speed: ").concat(player.attributes.speed, " \n\n\t\t\t\t\t\tDexterity: ").concat(player.attributes.dex, " Fortitude: ").concat(player.attributes.fort, " \n\n\t\t\t\t\t\tLuck: ").concat(player.attributes.luck, " Level: ").concat(player.level, "\n\t\t\t\t</h3>\n\t\t\t"));
+      dom.addChild(playerInfoWrapper, playerStats);
+      var playerSprite = dom.createEl();
+      dom.setClass(playerSprite, 'playerRowPlayerSprite');
+      dom.setBackground(playerSprite, "".concat(player.type));
+      dom.addChild(playerInfoWrapper, playerSprite);
+      var weaponStats = dom.createEl();
+      dom.setClass(weaponStats, 'playerRowWeaponStats');
+      dom.setHTML(weaponStats, "\n\t\t\t\t<h3>".concat(player.weaponType, ", ").concat(player.weaponQual, "</h3>\n\t\t\t"));
+      dom.addChild(playerInfoWrapper, weaponStats);
+      var weaponIcon = dom.createEl();
+      dom.setClass(weaponIcon, 'playerRowWeaponIcon');
+      dom.setBackground(weaponIcon, "".concat(player.weaponQual.toLowerCase()));
+      dom.addChild(playerInfoWrapper, weaponIcon);
+    }
+  }, {
+    key: "populateTurnOrder",
+    value: function populateTurnOrder(turnOrder) {}
+  }, {
+    key: "populateInventory",
+    value: function populateInventory(player) {}
+  }, {
+    key: "populateActions",
+    value: function populateActions() {}
+  }, {
+    key: "populateFloor",
+    value: function populateFloor(player, turnOrder) {
+      var welcome = dom.findByClass('.welcome');
+      dom.clear(welcome);
+      var floor = dom.findByClass('.floor');
+      var backdrop = dom.findByClass('.backdrop');
+      dom.setBackground(backdrop, 'backdrop');
+      this.populatePlayerRow(player); // this.populateTurnOrder(turnOrder);
+      // this.populateInventory(player);
+      // this.populateActions();
     }
   }]);
 

@@ -5,6 +5,7 @@ var render = new Render();
 var dom = new Dom();
 var player;
 var level = 1;
+var turnOrder = [];
 render.playArea();
 render.welcome();
 export function chooseCharacter(type) {
@@ -15,6 +16,9 @@ export function chooseName(name) {
   player.name = name;
   render.prepare(player, level);
 }
-export function startGame() {
-  console.log('Start Game');
+export function startFloor() {
+  // generate monsters
+  // determine turn order
+  // pass player, turn order array with monsters
+  render.populateFloor(player, turnOrder);
 }

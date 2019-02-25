@@ -1,5 +1,5 @@
 import Dom from './dom.js';
-import {chooseCharacter, chooseName, startGame} from './app.js';
+import {chooseCharacter, chooseName, startFloor} from './app.js';
 
 let dom = new Dom();
 
@@ -187,15 +187,87 @@ export default class Render{
 		dom.addChild(prepareWrapper, stats);
 		dom.setHTML(stats,
 			`
-				<h2>${player.name}</h2>
-				<h3>Floor ${level}</h3>
+				<h2>${player.name}, Level ${player.level} ${player.type}</h2>
+				<h3>Strength: ${player.attributes.str} / Speed: ${player.attributes.speed} / Dexterity: ${player.attributes.dex}</h3>
+				<h3>Fortitude: ${player.attributes.fort} / Luck: ${player.attributes.luck} / Max HP: ${player.attributes.maxHP}</h3>
+				<h3>Weapon: ${player.weaponType} / Quality: ${player.weapon}
+				<h2>Floor ${level}</h2>
 			`
 		)
 
 
 		let submit = dom.createButton('Enter...');
-		dom.addListener(submit, 'click', ()=> startGame());
+		dom.addListener(submit, 'click', startFloor);
 		dom.addChild(prepareWrapper, submit);
+	}
+
+	// Floor
+
+	populatePlayerRow(player){
+		let playerRow = dom.findByClass('.playerRow');
+		let playerInfoWrapper = dom.createEl();
+		dom.setClass(playerInfoWrapper, 'playerInfoWrapper');
+		dom.addChild(playerRow, playerInfoWrapper);
+
+		let playerHealth = dom.createEl();
+		dom.setClass(playerHealth, 'playerRowPlayerHealth');
+		dom.setHTML(playerHealth, `
+				<h3>${player.hp}/${player.attributes.maxHP}</h3>
+			`);
+		dom.addChild(playerInfoWrapper, playerHealth);
+
+		let playerStats = dom.createEl();
+		dom.setClass(playerStats, 'playerRowPlayerStats');
+		dom.setHTML(playerStats, `
+				<h3>Strength: ${player.attributes.str} Speed: ${player.attributes.speed} \n
+						Dexterity: ${player.attributes.dex} Fortitude: ${player.attributes.fort} \n
+						Luck: ${player.attributes.luck} Level: ${player.level}
+				</h3>
+			`)
+		dom.addChild(playerInfoWrapper, playerStats);
+
+		let playerSprite = dom.createEl();
+		dom.setClass(playerSprite, 'playerRowPlayerSprite');
+		dom.setBackground(playerSprite, `${player.type}`);
+		dom.addChild(playerInfoWrapper, playerSprite);
+
+		let weaponStats = dom.createEl();
+		dom.setClass(weaponStats, 'playerRowWeaponStats');
+		dom.setHTML(weaponStats, `
+				<h3>${player.weaponType}, ${player.weaponQual}</h3>
+			`);
+		dom.addChild(playerInfoWrapper, weaponStats);
+
+		let weaponIcon = dom.createEl();
+		dom.setClass(weaponIcon, 'playerRowWeaponIcon');
+		dom.setBackground(weaponIcon, `${player.weaponQual.toLowerCase()}`);
+		dom.addChild(playerInfoWrapper, weaponIcon);
+	}
+
+	populateTurnOrder(turnOrder){
+
+	}
+
+	populateInventory(player){
+
+	}
+
+	populateActions(){
+
+	}
+
+	populateFloor(player, turnOrder){
+		let welcome = dom.findByClass('.welcome');
+		dom.clear(welcome);
+		let floor = dom.findByClass('.floor');
+		let backdrop = dom.findByClass('.backdrop');
+		dom.setBackground(backdrop, 'backdrop');
+
+		this.populatePlayerRow(player);
+		// this.populateTurnOrder(turnOrder);
+		// this.populateInventory(player);
+		// this.populateActions();
+
 	}
 
 }
