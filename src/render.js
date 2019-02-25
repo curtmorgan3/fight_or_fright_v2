@@ -205,6 +205,7 @@ export default class Render{
 
 	populatePlayerRow(player){
 		let playerRow = dom.findByClass('.playerRow');
+		dom.clear(playerRow);
 		let playerInfoWrapper = dom.createEl();
 		dom.setClass(playerInfoWrapper, 'playerInfoWrapper');
 		dom.addChild(playerRow, playerInfoWrapper);
@@ -249,11 +250,31 @@ export default class Render{
 	}
 
 	populateInventory(player){
+		let inventory = dom.findByClass('.inventory');
+		dom.clear(inventory);
 
+		player.inventory.forEach(item => {
+			let invenItem = dom.createEl();
+			dom.setBackground(invenItem, 'healthPotion');
+			dom.setClass(invenItem, 'playerInventoryItem');
+			dom.addListener(invenItem, 'click', player.takePotion);
+			dom.addChild(inventory, invenItem);
+		});
 	}
 
-	populateActions(){
+	populateActions(player){
+		let actions = dom.findByClass('.actions');
+		dom.clear(actions);
 
+		let attackButton = dom.createButton('Attack');
+		dom.setClass(attackButton, 'actionButton');
+		dom.addListener(attackButton, 'click', player.attack);
+		dom.addChild(actions, attackButton);
+
+		let escapeButton = dom.createButton('Escape');
+		dom.setClass(escapeButton, 'actionButton');
+		dom.addListener(escapeButton, 'click', player.escape);
+		dom.addChild(actions, escapeButton);
 	}
 
 	populateFloor(player, turnOrder){
@@ -265,8 +286,8 @@ export default class Render{
 
 		this.populatePlayerRow(player);
 		// this.populateTurnOrder(turnOrder);
-		// this.populateInventory(player);
-		// this.populateActions();
+		this.populateInventory(player);
+		this.populateActions(player);
 
 	}
 

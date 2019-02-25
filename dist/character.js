@@ -12,7 +12,7 @@ function () {
     this.level = 1;
     this.xp = 0;
     this.attributes = this.attributes(type);
-    this.inventory = [];
+    this.inventory = ['potion', 'potion'];
     this.weaponType = 'Wooden Sword';
     this.weapon = 6;
     this.weaponQual = 'Poor';
@@ -101,6 +101,21 @@ function () {
       return attributes;
     } // Instance Methods
 
+  }, {
+    key: "takePotion",
+    value: function takePotion() {
+      console.log('take potion');
+    }
+  }, {
+    key: "attack",
+    value: function attack() {
+      console.log('player attack');
+    }
+  }, {
+    key: "escape",
+    value: function escape() {
+      console.log('player escape');
+    }
   }]);
 
   return Character;

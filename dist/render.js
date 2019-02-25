@@ -200,6 +200,7 @@ function () {
     key: "populatePlayerRow",
     value: function populatePlayerRow(player) {
       var playerRow = dom.findByClass('.playerRow');
+      dom.clear(playerRow);
       var playerInfoWrapper = dom.createEl();
       dom.setClass(playerInfoWrapper, 'playerInfoWrapper');
       dom.addChild(playerRow, playerInfoWrapper);
@@ -229,10 +230,31 @@ function () {
     value: function populateTurnOrder(turnOrder) {}
   }, {
     key: "populateInventory",
-    value: function populateInventory(player) {}
+    value: function populateInventory(player) {
+      var inventory = dom.findByClass('.inventory');
+      dom.clear(inventory);
+      player.inventory.forEach(function (item) {
+        var invenItem = dom.createEl();
+        dom.setBackground(invenItem, 'healthPotion');
+        dom.setClass(invenItem, 'playerInventoryItem');
+        dom.addListener(invenItem, 'click', player.takePotion);
+        dom.addChild(inventory, invenItem);
+      });
+    }
   }, {
     key: "populateActions",
-    value: function populateActions() {}
+    value: function populateActions(player) {
+      var actions = dom.findByClass('.actions');
+      dom.clear(actions);
+      var attackButton = dom.createButton('Attack');
+      dom.setClass(attackButton, 'actionButton');
+      dom.addListener(attackButton, 'click', player.attack);
+      dom.addChild(actions, attackButton);
+      var escapeButton = dom.createButton('Escape');
+      dom.setClass(escapeButton, 'actionButton');
+      dom.addListener(escapeButton, 'click', player.escape);
+      dom.addChild(actions, escapeButton);
+    }
   }, {
     key: "populateFloor",
     value: function populateFloor(player, turnOrder) {
@@ -242,8 +264,9 @@ function () {
       var backdrop = dom.findByClass('.backdrop');
       dom.setBackground(backdrop, 'backdrop');
       this.populatePlayerRow(player); // this.populateTurnOrder(turnOrder);
-      // this.populateInventory(player);
-      // this.populateActions();
+
+      this.populateInventory(player);
+      this.populateActions(player);
     }
   }]);
 

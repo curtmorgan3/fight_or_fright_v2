@@ -6,7 +6,7 @@ export default class Character{
 		this.level = 1;
 		this.xp = 0;
 		this.attributes = this.attributes(type);
-		this.inventory = [];
+		this.inventory = ['potion', 'potion'];
 		this.weaponType = 'Wooden Sword';
 		this.weapon = 6;
 		this.weaponQual = 'Poor';
@@ -83,4 +83,13 @@ export default class Character{
 
 	// Instance Methods
 
+	takePotion(){
+		console.log('take potion');
+	}
+	attack(){
+		console.log('player attack');
+	}
+	escape(){
+		console.log('player escape');
+	}
 }
