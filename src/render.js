@@ -246,6 +246,13 @@ export default class Render{
 	}
 
 	populateTurnOrder(turnOrder){
+		let order = dom.findByClass('.order');
+		turnOrder.forEach(pos => {
+			let sprite = dom.createEl();
+			dom.setClass(sprite, 'portraitOrder');
+			dom.setBackground(sprite, pos.type);
+			dom.addChild(order, sprite);
+		});
 
 	}
 
@@ -277,17 +284,27 @@ export default class Render{
 		dom.addChild(actions, escapeButton);
 	}
 
-	populateFloor(player, turnOrder){
-		let welcome = dom.findByClass('.welcome');
-		dom.clear(welcome);
+	populateBackdrop(monsters){
+		let backdrop = dom.findByClass('.backdrop');
+		monsters.forEach(monster => {
+			let sprite = dom.createEl();
+			dom.setClass(sprite, 'portraitMonster');
+			dom.setBackground(sprite, monster.type);
+			dom.addChild(backdrop, sprite);
+		});
+	}
+
+	populateFloor(player, turnOrder, monsters){
 		let floor = dom.findByClass('.floor');
 		let backdrop = dom.findByClass('.backdrop');
+		dom.clear(backdrop);
 		dom.setBackground(backdrop, 'backdrop');
 
 		this.populatePlayerRow(player);
-		// this.populateTurnOrder(turnOrder);
+		this.populateTurnOrder(turnOrder);
 		this.populateInventory(player);
 		this.populateActions(player);
+		this.populateBackdrop(monsters);
 
 	}
 

@@ -227,7 +227,15 @@ function () {
     }
   }, {
     key: "populateTurnOrder",
-    value: function populateTurnOrder(turnOrder) {}
+    value: function populateTurnOrder(turnOrder) {
+      var order = dom.findByClass('.order');
+      turnOrder.forEach(function (pos) {
+        var sprite = dom.createEl();
+        dom.setClass(sprite, 'portraitOrder');
+        dom.setBackground(sprite, pos.type);
+        dom.addChild(order, sprite);
+      });
+    }
   }, {
     key: "populateInventory",
     value: function populateInventory(player) {
@@ -256,17 +264,28 @@ function () {
       dom.addChild(actions, escapeButton);
     }
   }, {
+    key: "populateBackdrop",
+    value: function populateBackdrop(monsters) {
+      var backdrop = dom.findByClass('.backdrop');
+      monsters.forEach(function (monster) {
+        var sprite = dom.createEl();
+        dom.setClass(sprite, 'portraitMonster');
+        dom.setBackground(sprite, monster.type);
+        dom.addChild(backdrop, sprite);
+      });
+    }
+  }, {
     key: "populateFloor",
-    value: function populateFloor(player, turnOrder) {
-      var welcome = dom.findByClass('.welcome');
-      dom.clear(welcome);
+    value: function populateFloor(player, turnOrder, monsters) {
       var floor = dom.findByClass('.floor');
       var backdrop = dom.findByClass('.backdrop');
+      dom.clear(backdrop);
       dom.setBackground(backdrop, 'backdrop');
-      this.populatePlayerRow(player); // this.populateTurnOrder(turnOrder);
-
+      this.populatePlayerRow(player);
+      this.populateTurnOrder(turnOrder);
       this.populateInventory(player);
       this.populateActions(player);
+      this.populateBackdrop(monsters);
     }
   }]);
 

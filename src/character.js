@@ -86,9 +86,11 @@ export default class Character{
 	takePotion(){
 		console.log('take potion');
 	}
+
 	attack(){
 		console.log('player attack');
 	}
+
 	escape(){
 		console.log('player escape');
 	}

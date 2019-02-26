@@ -16,8 +16,10 @@
 	grid-column: 2;
 
 	display: flex;
+	flex-wrap: wrap;
 	justify-content: center;
 	align-items: center;
+	overflow: auto;
 
 	height: 100%;
 	width: auto;
@@ -65,6 +67,7 @@
 	width: 100%;
 	background-color: #3E1C33;
 	opacity: 0.7;
+	display: flex;
 }
 
 /* Welcome ***************************/
@@ -195,6 +198,24 @@
   background-repeat: no-repeat;
   text-align: center;
 }
+.portraitOrder{
+	margin: auto;
+  height: 75px;
+  width: 75px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  text-align: center;
+}
+.portraitMonster{
+	margin: auto;
+  max-height: 100px;
+  max-width: 100px;
+	height: 100%;
+	width: 100%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  text-align: center;
+}
 .portrait:hover{
 	height: 100px;
 	width: 100px;
@@ -210,6 +231,9 @@
 	.backdrop{
 		background-color: grey;
 		background-image: none;
+	}
+	.order{
+		overflow: auto;
 	}
 	.welcome{
 		grid-template-columns: 33% 33% 33%;
@@ -303,5 +327,15 @@
 
 	.actionButton{
 		font-size: 50px;
+	}
+
+	/* Floor Backdrop ***********/
+	.portraitMonster{
+		min-height: 250px;
+		min-width: 250px;
+	}
+	.portraitOrder{
+	  min-height: 200px;
+	  min-width: 200px;
 	}
 }
