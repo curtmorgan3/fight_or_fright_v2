@@ -1,9 +1,11 @@
+import _regeneratorRuntime from "@babel/runtime/regenerator";
+import _asyncToGenerator from "@babel/runtime/helpers/asyncToGenerator";
 import _classCallCheck from "@babel/runtime/helpers/classCallCheck";
 import _createClass from "@babel/runtime/helpers/createClass";
 import Helper from './helper.js';
 import Render from './render.js';
 import Dom from './dom.js';
-import { player } from './app.js';
+import { player, attackTurn } from './app.js';
 var render = new Render();
 var dom = new Dom();
 
@@ -14,6 +16,7 @@ function () {
     _classCallCheck(this, Character);
 
     this.type = type;
+    this.id = 'player';
     this.level = 1;
     this.xp = 0;
     this.attributes = this.attributes(type);
@@ -24,6 +27,7 @@ function () {
     this.hp = this.attributes.maxHP;
     this.name = '';
     this.attacking = false;
+    this.went = false;
   } // Static Methods
 
 
@@ -114,11 +118,51 @@ function () {
       render.removePotion(id);
     }
   }, {
+    key: "attackMonster",
+    value: function () {
+      var _attackMonster = _asyncToGenerator(
+      /*#__PURE__*/
+      _regeneratorRuntime.mark(function _callee(id) {
+        var attackButton;
+        return _regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                if (player.attacking) {
+                  console.log("player attacks ".concat(id));
+                  attackButton = dom.findById('attackButton');
+                  dom.setText(attackButton, 'Attack');
+                  player.went = true;
+                  player.attacking = false;
+                  attackTurn();
+                } else {
+                  console.log('Not players turn');
+                }
+
+              case 1:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }));
+
+      function attackMonster(_x) {
+        return _attackMonster.apply(this, arguments);
+      }
+
+      return attackMonster;
+    }()
+  }, {
     key: "attack",
     value: function attack() {
+      console.log('players turn');
       player.attacking = true;
-      var attackButton = dom.findById('attackButton');
-      dom.setText(attackButton, 'Select a Target');
+
+      if (player.attacking) {
+        var attackButton = dom.findById('attackButton');
+        dom.setText(attackButton, 'Select a Target');
+      }
     }
   }, {
     key: "escape",

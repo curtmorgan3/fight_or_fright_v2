@@ -1,3 +1,5 @@
+import _regeneratorRuntime from "@babel/runtime/regenerator";
+import _asyncToGenerator from "@babel/runtime/helpers/asyncToGenerator";
 import _classCallCheck from "@babel/runtime/helpers/classCallCheck";
 import _createClass from "@babel/runtime/helpers/createClass";
 import Dom from './dom.js';
@@ -311,11 +313,31 @@ function () {
       monsters.forEach(function (monster) {
         var sprite = dom.createEl();
         dom.setClass(sprite, 'portraitMonster');
+        dom.setId(sprite, monster.id);
         dom.setBackground(sprite, monster.type);
         dom.addChild(backdrop, sprite);
-        dom.addListener(sprite, 'click', function () {
-          return monster.attacked(player);
-        });
+        dom.addListener(sprite, 'click',
+        /*#__PURE__*/
+        _asyncToGenerator(
+        /*#__PURE__*/
+        _regeneratorRuntime.mark(function _callee() {
+          return _regeneratorRuntime.wrap(function _callee$(_context) {
+            while (1) {
+              switch (_context.prev = _context.next) {
+                case 0:
+                  _context.next = 2;
+                  return player.attackMonster(monster.id);
+
+                case 2:
+                  return _context.abrupt("return", _context.sent);
+
+                case 3:
+                case "end":
+                  return _context.stop();
+              }
+            }
+          }, _callee);
+        })));
       });
     }
   }, {

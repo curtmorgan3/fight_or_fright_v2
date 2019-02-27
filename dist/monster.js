@@ -15,6 +15,8 @@ function () {
     this.attributes = this.setMonsterAttributes(type, playerLevel);
     this.weapon = this.setWeapon();
     this.hp = this.attributes.maxHP;
+    this.id = Helper.randNumber(10000);
+    this.attacking = false;
   }
 
   _createClass(Monster, [{
@@ -108,19 +110,31 @@ function () {
       return Math.ceil(Helper.randNumber(this.attributes.str) / 2);
     }
   }, {
-    key: "attacked",
-    value: function attacked(player) {
-      if (player.attacking) {
-        console.log('monster attacked');
-        player.attacking = false;
-        var attackButton = dom.findById('attackButton');
-        dom.setText(attackButton, 'Attack');
-      } else {
-        console.log('player not attacking');
-      }
+    key: "attack",
+    value: function attack(player) {
+      var _this2 = this;
 
-      console.log(player);
-    }
+      if (player.attacking) {
+        this.attacking = false;
+      } else {
+        setTimeout(function () {
+          console.log("Monster ".concat(_this2.id, " attacks"));
+          var sprite = dom.findById(_this2.id);
+          dom.setClass(sprite, 'attackingSprite');
+        }, 2000);
+      }
+    } // attacked(player){
+    // 	if(player.attacking){
+    // 		player.attacking = false;
+    // 		let attackButton = dom.findById('attackButton');
+    // 		dom.setText(attackButton, 'Attack');
+    // 		return(this.id);
+    // 	}else{
+    // 		console.log('player not attacking');
+    //
+    // 	}
+    // }
+
   }]);
 
   return Monster;

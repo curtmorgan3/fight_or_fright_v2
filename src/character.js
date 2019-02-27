@@ -1,13 +1,14 @@
 import Helper from './helper.js';
 import Render from './render.js';
 import Dom from './dom.js';
-import {player} from './app.js';
+import {player, attackTurn} from './app.js';
 let render = new Render();
 let dom = new Dom();
 
 export default class Character{
 	constructor(type){
 		this.type = type;
+		this.id = 'player';
 		this.level = 1;
 		this.xp = 0;
 		this.attributes = this.attributes(type);
@@ -18,6 +19,7 @@ export default class Character{
 		this.hp = this.attributes.maxHP;
 		this.name = '';
 		this.attacking = false;
+		this.went = false; 
 	}
 
 	// Static Methods
@@ -94,10 +96,27 @@ export default class Character{
 		render.removePotion(id);
 	}
 
+	async attackMonster(id){
+		if(player.attacking){
+			console.log(`player attacks ${id}`);
+			let attackButton = dom.findById('attackButton');
+			dom.setText(attackButton, 'Attack');
+			player.went = true;
+			player.attacking = false;
+			attackTurn();
+		}else {
+			console.log('Not players turn');
+		}
+
+	}
+
 	attack(){
+		console.log('players turn');
 		player.attacking = true;
-		let attackButton = dom.findById('attackButton');
-		dom.setText(attackButton, 'Select a Target');
+		if(player.attacking){
+			let attackButton = dom.findById('attackButton');
+			dom.setText(attackButton, 'Select a Target');
+		}
 	}
 
 	escape(){

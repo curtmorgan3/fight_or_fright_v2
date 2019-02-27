@@ -230,6 +230,18 @@
   background-repeat: no-repeat;
   text-align: center;
 }
+.attackingSprite{
+	margin: auto;
+  max-height: 100px;
+  max-width: 100px;
+	height: 100%;
+	width: 100%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  text-align: center;
+	box-sizing: border-box;
+	border: 2px solid gold;
+}
 .portrait:hover{
 	height: 100px;
 	width: 100px;

@@ -328,9 +328,10 @@ export default class Render{
 		monsters.forEach(monster => {
 			let sprite = dom.createEl();
 			dom.setClass(sprite, 'portraitMonster');
+			dom.setId(sprite, monster.id);
 			dom.setBackground(sprite, monster.type);
 			dom.addChild(backdrop, sprite);
-			dom.addListener(sprite, 'click', ()=> monster.attacked(player));
+			dom.addListener(sprite, 'click', async ()=> await player.attackMonster(monster.id));
 		});
 	}
 

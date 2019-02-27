@@ -9,6 +9,8 @@ export default class Monster{
 		this.attributes = this.setMonsterAttributes(type, playerLevel);
 		this.weapon = this.setWeapon();
 		this.hp = this.attributes.maxHP;
+		this.id = Helper.randNumber(10000);
+		this.attacking = false;
 	}
 
 
@@ -80,17 +82,28 @@ export default class Monster{
 		return Math.ceil(Helper.randNumber(this.attributes.str) / 2);
 	}
 
-	attacked(player){
+	attack(player){
 		if(player.attacking){
-			console.log('monster attacked');
-			player.attacking = false;
-			let attackButton = dom.findById('attackButton');
-			dom.setText(attackButton, 'Attack');
+			this.attacking = false;
 		}else{
-			console.log('player not attacking');
-
+			setTimeout( ()=> {
+				console.log(`Monster ${this.id} attacks`);
+				let sprite = dom.findById(this.id);
+				dom.setClass(sprite, 'attackingSprite');
+			}, 2000)
 		}
-		console.log(player);
 	}
+
+	// attacked(player){
+	// 	if(player.attacking){
+	// 		player.attacking = false;
+	// 		let attackButton = dom.findById('attackButton');
+	// 		dom.setText(attackButton, 'Attack');
+	// 		return(this.id);
+	// 	}else{
+	// 		console.log('player not attacking');
+	//
+	// 	}
+	// }
 
 }
