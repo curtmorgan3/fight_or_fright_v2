@@ -82,16 +82,17 @@ export default class Monster{
 		return Math.ceil(Helper.randNumber(this.attributes.str) / 2);
 	}
 
-	attack(player){
+	async attack(player){
+		let next = 0;
 		if(player.attacking){
 			this.attacking = false;
 		}else{
-			setTimeout( ()=> {
-				console.log(`Monster ${this.id} attacks`);
-				let sprite = dom.findById(this.id);
-				dom.setClass(sprite, 'attackingSprite');
-			}, 2000)
+			console.log(`Monster ${this.id} attacks`);
+			let sprite = dom.findById(this.id);
+			dom.setClass(sprite, 'attackingSprite');
+
 		}
+		await Helper.sleep(5000);
 	}
 
 	// attacked(player){

@@ -80,53 +80,54 @@ function _attackTurn() {
   _attackTurn = _asyncToGenerator(
   /*#__PURE__*/
   _regeneratorRuntime.mark(function _callee(n) {
-    var i;
+    var interval, i;
     return _regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            if (player.went) {
+            if (player.went && findPlayerPosition() !== turnOrder.length - 1) {
               n = findPlayerPosition() + 1;
               player.went = false;
             } else {
               n = 0;
             }
 
+            interval = 5 * 1000;
             i = n;
 
-          case 2:
+          case 3:
             if (!(i < turnOrder.length)) {
-              _context.next = 15;
+              _context.next = 16;
               break;
             }
 
             if (!(turnOrder[i].id === 'player')) {
-              _context.next = 8;
+              _context.next = 9;
               break;
             }
 
             player.attacking = true;
             i = turnOrder.length + 1;
-            _context.next = 12;
+            _context.next = 13;
             break;
 
-          case 8:
+          case 9:
             player.attacking = false;
-            _context.next = 11;
+            _context.next = 12;
             return turnOrder[i].attack(turnOrder[i].id, player);
 
-          case 11:
+          case 12:
             if (i === turnOrder.length - 1) {
               console.log('start again');
               attackTurn();
             }
 
-          case 12:
+          case 13:
             i++;
-            _context.next = 2;
+            _context.next = 3;
             break;
 
-          case 15:
+          case 16:
           case "end":
             return _context.stop();
         }

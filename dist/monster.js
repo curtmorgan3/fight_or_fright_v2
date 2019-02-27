@@ -1,3 +1,5 @@
+import _regeneratorRuntime from "@babel/runtime/regenerator";
+import _asyncToGenerator from "@babel/runtime/helpers/asyncToGenerator";
 import _classCallCheck from "@babel/runtime/helpers/classCallCheck";
 import _createClass from "@babel/runtime/helpers/createClass";
 import Helper from './helper.js';
@@ -111,19 +113,42 @@ function () {
     }
   }, {
     key: "attack",
-    value: function attack(player) {
-      var _this2 = this;
+    value: function () {
+      var _attack = _asyncToGenerator(
+      /*#__PURE__*/
+      _regeneratorRuntime.mark(function _callee(player) {
+        var next, sprite;
+        return _regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                next = 0;
 
-      if (player.attacking) {
-        this.attacking = false;
-      } else {
-        setTimeout(function () {
-          console.log("Monster ".concat(_this2.id, " attacks"));
-          var sprite = dom.findById(_this2.id);
-          dom.setClass(sprite, 'attackingSprite');
-        }, 2000);
+                if (player.attacking) {
+                  this.attacking = false;
+                } else {
+                  console.log("Monster ".concat(this.id, " attacks"));
+                  sprite = dom.findById(this.id);
+                  dom.setClass(sprite, 'attackingSprite');
+                }
+
+                _context.next = 4;
+                return Helper.sleep(5000);
+
+              case 4:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function attack(_x) {
+        return _attack.apply(this, arguments);
       }
-    } // attacked(player){
+
+      return attack;
+    }() // attacked(player){
     // 	if(player.attacking){
     // 		player.attacking = false;
     // 		let attackButton = dom.findById('attackButton');

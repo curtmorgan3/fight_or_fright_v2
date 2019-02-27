@@ -1,3 +1,5 @@
+import _regeneratorRuntime from "@babel/runtime/regenerator";
+import _asyncToGenerator from "@babel/runtime/helpers/asyncToGenerator";
 import _classCallCheck from "@babel/runtime/helpers/classCallCheck";
 import _createClass from "@babel/runtime/helpers/createClass";
 import Monster from './monster.js';
@@ -55,6 +57,34 @@ function () {
       });
       return turnOrder;
     }
+  }, {
+    key: "sleep",
+    value: function () {
+      var _sleep = _asyncToGenerator(
+      /*#__PURE__*/
+      _regeneratorRuntime.mark(function _callee(milliseconds) {
+        return _regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                return _context.abrupt("return", new Promise(function (resolve) {
+                  return setTimeout(resolve, milliseconds);
+                }));
+
+              case 1:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }));
+
+      function sleep(_x) {
+        return _sleep.apply(this, arguments);
+      }
+
+      return sleep;
+    }()
   }]);
 
   return Helper;

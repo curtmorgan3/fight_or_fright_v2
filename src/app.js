@@ -75,12 +75,13 @@ function startGame(){
 }
 
 export async function attackTurn(n){
-	if(player.went){
+	if(player.went && findPlayerPosition() !== turnOrder.length -1){
 		n = findPlayerPosition() + 1;
 		player.went = false;
 	}else{
 		n = 0;
 	}
+	let interval = 5 * 1000;
 	for(let i = n; i<turnOrder.length; i++){
 		if(turnOrder[i].id === 'player'){
 			player.attacking = true;

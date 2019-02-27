@@ -43,5 +43,9 @@ export default class Helper{
 		return turnOrder;
 	};
 
+	static async sleep(milliseconds){
+		return new Promise(resolve => setTimeout(resolve, milliseconds));
+	}
+
 
 }
