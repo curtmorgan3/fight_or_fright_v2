@@ -5,10 +5,8 @@ import Helper from './helper.js';
 var render = new Render();
 var dom = new Dom();
 var player;
-var floor = 5;
+var floor = 1;
 var turnOrder = [];
-render.playArea();
-render.welcome();
 export function chooseCharacter(type) {
   player = new Character(type);
   render.name(player.type);
@@ -19,7 +17,28 @@ export function chooseName(name) {
 }
 export function startFloor() {
   var monsters = Helper.generateMonsters(floor, player);
-  var turnOrder = Helper.determineTurnOrder(player, monsters); // pass player, turn order array with monsters
-
+  var turnOrder = Helper.determineTurnOrder(player, monsters);
   render.populateFloor(player, turnOrder, monsters);
 }
+export function endFloor() {
+  floor++;
+  render.endFloor(player, floor);
+}
+export function gameOver() {
+  render.gameOver(player, floor);
+}
+export function playAgain() {
+  floor = 1;
+  render.clearFloor();
+  render.clearField();
+  render.playArea();
+  render.welcome();
+}
+
+function startGame() {
+  render.floor();
+  render.playArea();
+  render.welcome();
+}
+
+startGame();

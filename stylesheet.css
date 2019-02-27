@@ -188,6 +188,17 @@
 	color: #F6921E;
 }
 
+.floorEnd{
+	color: #F6921E;
+	background-color: #413A41;
+	height: 100%;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
 
 /* Sprites */
 .portrait{
@@ -337,5 +348,10 @@
 	.portraitOrder{
 	  min-height: 200px;
 	  min-width: 200px;
+	}
+
+	/* Floor End **************/
+	.floorEnd > *{
+		font-size: 70px;
 	}
 }

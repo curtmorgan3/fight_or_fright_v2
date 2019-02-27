@@ -1,7 +1,7 @@
 import _classCallCheck from "@babel/runtime/helpers/classCallCheck";
 import _createClass from "@babel/runtime/helpers/createClass";
 import Dom from './dom.js';
-import { chooseCharacter, chooseName, startFloor } from './app.js';
+import { chooseCharacter, chooseName, startFloor, endFloor, gameOver, playAgain } from './app.js';
 var dom = new Dom();
 
 var Render =
@@ -12,8 +12,27 @@ function () {
   }
 
   _createClass(Render, [{
-    key: "floor",
+    key: "clearFloor",
     // Play Area
+    value: function clearFloor() {
+      var backdrop = dom.findByClass('.backdrop');
+      var playerRow = dom.findByClass('.playerRow');
+      var actions = dom.findByClass('.actions');
+      var inventory = dom.findByClass('.inventory');
+      var order = dom.findByClass('.order');
+      var field = [backdrop, playerRow, actions, inventory, order];
+      field.forEach(function (area) {
+        dom.clear(area);
+      });
+    }
+  }, {
+    key: "clearField",
+    value: function clearField() {
+      var field = dom.findByClass('.field');
+      dom.clear(field);
+    }
+  }, {
+    key: "floor",
     value: function floor() {
       var field = dom.findByClass('.field');
       var floor = dom.createEl();
@@ -261,7 +280,16 @@ function () {
       var escapeButton = dom.createButton('Escape');
       dom.setClass(escapeButton, 'actionButton');
       dom.addListener(escapeButton, 'click', player.escape);
-      dom.addChild(actions, escapeButton);
+      dom.addChild(actions, escapeButton); // Temporary Buttons
+
+      var endButton = dom.createButton('End Floor');
+      dom.setClass(endButton, 'actionButton');
+      dom.addListener(endButton, 'click', endFloor);
+      dom.addChild(actions, endButton);
+      var endGame = dom.createButton('End Game');
+      dom.setClass(endGame, 'actionButton');
+      dom.addListener(endGame, 'click', gameOver);
+      dom.addChild(actions, endGame);
     }
   }, {
     key: "populateBackdrop",
@@ -286,6 +314,37 @@ function () {
       this.populateInventory(player);
       this.populateActions(player);
       this.populateBackdrop(monsters);
+    } // End Floor
+
+  }, {
+    key: "endFloor",
+    value: function endFloor(player, floor) {
+      this.clearFloor();
+      var backdrop = dom.findByClass('.backdrop');
+      var actions = dom.findByClass('.actions');
+      var end = dom.createEl();
+      dom.setClass(end, 'floorEnd');
+      dom.setHTML(end, "\n\t\t\t<h2>Floor clear!</h2>\n\t\t\t<h3>Prepare for floor ".concat(floor, "!</h3>\n\t\t"));
+      dom.addChild(backdrop, end);
+      var cont = dom.createButton('Continue');
+      dom.setClass(cont, 'actionButton');
+      dom.addListener(cont, 'click', startFloor);
+      dom.addChild(actions, cont);
+    }
+  }, {
+    key: "gameOver",
+    value: function gameOver(player, floor) {
+      this.clearFloor();
+      var backdrop = dom.findByClass('.backdrop');
+      var actions = dom.findByClass('.actions');
+      var end = dom.createEl();
+      dom.setClass(end, 'floorEnd');
+      dom.addChild(backdrop, end);
+      dom.setHTML(end, "\n\t\t\t<h2>Game Over</h2>\n\t\t");
+      var again = dom.createButton('Play Again');
+      dom.setClass(again, 'actionButton');
+      dom.addListener(again, 'click', playAgain);
+      dom.addChild(actions, again);
     }
   }]);
 

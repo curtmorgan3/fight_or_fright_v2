@@ -1,11 +1,30 @@
 import Dom from './dom.js';
-import {chooseCharacter, chooseName, startFloor} from './app.js';
+import {chooseCharacter, chooseName, startFloor, endFloor, gameOver, playAgain} from './app.js';
 
 let dom = new Dom();
 
 export default class Render{
 
 	// Play Area
+
+	clearFloor(){
+		let backdrop = dom.findByClass('.backdrop');
+		let playerRow = dom.findByClass('.playerRow');
+		let actions = dom.findByClass('.actions');
+		let inventory = dom.findByClass('.inventory');
+		let order = dom.findByClass('.order');
+		let field = [backdrop, playerRow, actions, inventory, order];
+
+		field.forEach(area => {
+			dom.clear(area);
+		});
+	}
+
+	clearField(){
+		let field = dom.findByClass('.field');
+		dom.clear(field);
+	}
+
 	floor(){
 		let field = dom.findByClass('.field');
 		let floor = dom.createEl();
@@ -282,6 +301,16 @@ export default class Render{
 		dom.setClass(escapeButton, 'actionButton');
 		dom.addListener(escapeButton, 'click', player.escape);
 		dom.addChild(actions, escapeButton);
+		// Temporary Buttons
+		let endButton = dom.createButton('End Floor');
+		dom.setClass(endButton, 'actionButton');
+		dom.addListener(endButton, 'click', endFloor);
+		dom.addChild(actions, endButton);
+
+		let endGame = dom.createButton('End Game');
+		dom.setClass(endGame, 'actionButton');
+		dom.addListener(endGame, 'click', gameOver);
+		dom.addChild(actions, endGame);
 	}
 
 	populateBackdrop(monsters){
@@ -306,6 +335,46 @@ export default class Render{
 		this.populateActions(player);
 		this.populateBackdrop(monsters);
 
+	}
+
+	// End Floor
+
+	endFloor(player, floor){
+		this.clearFloor();
+		let backdrop = dom.findByClass('.backdrop');
+		let actions = dom.findByClass('.actions');
+
+		let end = dom.createEl();
+		dom.setClass(end, 'floorEnd');
+		dom.setHTML(end, `
+			<h2>Floor clear!</h2>
+			<h3>Prepare for floor ${floor}!</h3>
+		`);
+		dom.addChild(backdrop, end);
+
+		let cont = dom.createButton('Continue');
+		dom.setClass(cont, 'actionButton');
+		dom.addListener(cont, 'click', startFloor);
+		dom.addChild(actions, cont);
+
+	}
+
+	gameOver(player, floor){
+		this.clearFloor();
+		let backdrop = dom.findByClass('.backdrop');
+		let actions = dom.findByClass('.actions');
+
+		let end = dom.createEl();
+		dom.setClass(end, 'floorEnd');
+		dom.addChild(backdrop, end);
+		dom.setHTML(end, `
+			<h2>Game Over</h2>
+		`);
+
+		let again = dom.createButton('Play Again');
+		dom.setClass(again, 'actionButton');
+		dom.addListener(again, 'click', playAgain);
+		dom.addChild(actions, again);
 	}
 
 }
