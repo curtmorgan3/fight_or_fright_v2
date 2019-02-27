@@ -7,12 +7,20 @@ export default class Dom{
 		return document.querySelector(className);
 	}
 
+	findById(id){
+		return document.getElementById(id);
+	}
+
 	createEl(){
 		return document.createElement('div');
 	}
 
 	setClass(parent, className){
 		parent.className = `${className}`;
+	}
+
+	setId(parent, id){
+		parent.setAttribute('id', id);
 	}
 
 	setBackground(parent, image){

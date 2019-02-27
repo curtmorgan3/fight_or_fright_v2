@@ -14,6 +14,11 @@ function () {
       return document.querySelector(className);
     }
   }, {
+    key: "findById",
+    value: function findById(id) {
+      return document.getElementById(id);
+    }
+  }, {
     key: "createEl",
     value: function createEl() {
       return document.createElement('div');
@@ -22,6 +27,11 @@ function () {
     key: "setClass",
     value: function setClass(parent, className) {
       parent.className = "".concat(className);
+    }
+  }, {
+    key: "setId",
+    value: function setId(parent, id) {
+      parent.setAttribute('id', id);
     }
   }, {
     key: "setBackground",

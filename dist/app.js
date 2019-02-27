@@ -29,6 +29,8 @@ export function gameOver() {
 }
 export function playAgain() {
   floor = 1;
+  player = {};
+  turnOrder = [];
   render.clearFloor();
   render.clearField();
   render.playArea();
@@ -42,3 +44,4 @@ function startGame() {
 }
 
 startGame();
+export { player };

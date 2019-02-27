@@ -1,4 +1,6 @@
 import Helper from './helper.js';
+import Dom from './dom.js';
+let dom = new Dom();
 
 export default class Monster{
 	constructor(playerLevel, type){
@@ -76,6 +78,19 @@ export default class Monster{
 
 	setWeapon(){
 		return Math.ceil(Helper.randNumber(this.attributes.str) / 2);
+	}
+
+	attacked(player){
+		if(player.attacking){
+			console.log('monster attacked');
+			player.attacking = false;
+			let attackButton = dom.findById('attackButton');
+			dom.setText(attackButton, 'Attack');
+		}else{
+			console.log('player not attacking');
+
+		}
+		console.log(player);
 	}
 
 }

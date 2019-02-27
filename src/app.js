@@ -49,4 +49,9 @@ function startGame(){
 	render.playArea();
 	render.welcome();
 }
+
 startGame();
+
+export {
+	player
+}

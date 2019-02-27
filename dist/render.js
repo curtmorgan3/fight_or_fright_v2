@@ -1,6 +1,7 @@
 import _classCallCheck from "@babel/runtime/helpers/classCallCheck";
 import _createClass from "@babel/runtime/helpers/createClass";
 import Dom from './dom.js';
+import Helper from './helper.js';
 import { chooseCharacter, chooseName, startFloor, endFloor, gameOver, playAgain } from './app.js';
 var dom = new Dom();
 
@@ -264,9 +265,20 @@ function () {
         var invenItem = dom.createEl();
         dom.setBackground(invenItem, 'healthPotion');
         dom.setClass(invenItem, 'playerInventoryItem');
-        dom.addListener(invenItem, 'click', player.takePotion);
+        var id = Helper.randNumber(10000);
+        dom.setId(invenItem, id);
+        dom.addListener(invenItem, 'click', function () {
+          return player.takePotion(id);
+        });
         dom.addChild(inventory, invenItem);
       });
+    }
+  }, {
+    key: "removePotion",
+    value: function removePotion(id) {
+      var potion = dom.findById(id);
+      var inventory = dom.findByClass('.inventory');
+      inventory.removeChild(potion);
     }
   }, {
     key: "populateActions",
@@ -275,6 +287,7 @@ function () {
       dom.clear(actions);
       var attackButton = dom.createButton('Attack');
       dom.setClass(attackButton, 'actionButton');
+      dom.setId(attackButton, 'attackButton');
       dom.addListener(attackButton, 'click', player.attack);
       dom.addChild(actions, attackButton);
       var escapeButton = dom.createButton('Escape');
@@ -293,13 +306,16 @@ function () {
     }
   }, {
     key: "populateBackdrop",
-    value: function populateBackdrop(monsters) {
+    value: function populateBackdrop(monsters, player) {
       var backdrop = dom.findByClass('.backdrop');
       monsters.forEach(function (monster) {
         var sprite = dom.createEl();
         dom.setClass(sprite, 'portraitMonster');
         dom.setBackground(sprite, monster.type);
         dom.addChild(backdrop, sprite);
+        dom.addListener(sprite, 'click', function () {
+          return monster.attacked(player);
+        });
       });
     }
   }, {
@@ -313,7 +329,7 @@ function () {
       this.populateTurnOrder(turnOrder);
       this.populateInventory(player);
       this.populateActions(player);
-      this.populateBackdrop(monsters);
+      this.populateBackdrop(monsters, player);
     } // End Floor
 
   }, {

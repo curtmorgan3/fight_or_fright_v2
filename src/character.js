@@ -1,4 +1,9 @@
 import Helper from './helper.js';
+import Render from './render.js';
+import Dom from './dom.js';
+import {player} from './app.js';
+let render = new Render();
+let dom = new Dom();
 
 export default class Character{
 	constructor(type){
@@ -12,6 +17,7 @@ export default class Character{
 		this.weaponQual = 'Poor';
 		this.hp = this.attributes.maxHP;
 		this.name = '';
+		this.attacking = false;
 	}
 
 	// Static Methods
@@ -83,12 +89,15 @@ export default class Character{
 
 	// Instance Methods
 
-	takePotion(){
-		console.log('take potion');
+	takePotion(id){
+		this.hp = this.attributes.maxHP;
+		render.removePotion(id);
 	}
 
 	attack(){
-		console.log('player attack');
+		player.attacking = true;
+		let attackButton = dom.findById('attackButton');
+		dom.setText(attackButton, 'Select a Target');
 	}
 
 	escape(){

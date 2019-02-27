@@ -178,6 +178,9 @@
 	background-size: contain;
 	background-repeat: no-repeat;
 }
+.playerInventoryItem:hover{
+	border: 2px solid gold;
+}
 
 .actionButton{
 	height: 30%;

@@ -1,6 +1,8 @@
 import _classCallCheck from "@babel/runtime/helpers/classCallCheck";
 import _createClass from "@babel/runtime/helpers/createClass";
 import Helper from './helper.js';
+import Dom from './dom.js';
+var dom = new Dom();
 
 var Monster =
 /*#__PURE__*/
@@ -104,6 +106,20 @@ function () {
     key: "setWeapon",
     value: function setWeapon() {
       return Math.ceil(Helper.randNumber(this.attributes.str) / 2);
+    }
+  }, {
+    key: "attacked",
+    value: function attacked(player) {
+      if (player.attacking) {
+        console.log('monster attacked');
+        player.attacking = false;
+        var attackButton = dom.findById('attackButton');
+        dom.setText(attackButton, 'Attack');
+      } else {
+        console.log('player not attacking');
+      }
+
+      console.log(player);
     }
   }]);
 

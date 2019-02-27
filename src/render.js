@@ -1,4 +1,5 @@
 import Dom from './dom.js';
+import Helper from './helper.js';
 import {chooseCharacter, chooseName, startFloor, endFloor, gameOver, playAgain} from './app.js';
 
 let dom = new Dom();
@@ -283,9 +284,17 @@ export default class Render{
 			let invenItem = dom.createEl();
 			dom.setBackground(invenItem, 'healthPotion');
 			dom.setClass(invenItem, 'playerInventoryItem');
-			dom.addListener(invenItem, 'click', player.takePotion);
+			let id = Helper.randNumber(10000);
+			dom.setId(invenItem, id);
+			dom.addListener(invenItem, 'click', ()=> player.takePotion(id));
 			dom.addChild(inventory, invenItem);
 		});
+	}
+
+	removePotion(id){
+		let potion = dom.findById(id);
+		let inventory = dom.findByClass('.inventory');
+		inventory.removeChild(potion);
 	}
 
 	populateActions(player){
@@ -294,6 +303,7 @@ export default class Render{
 
 		let attackButton = dom.createButton('Attack');
 		dom.setClass(attackButton, 'actionButton');
+		dom.setId(attackButton, 'attackButton');
 		dom.addListener(attackButton, 'click', player.attack);
 		dom.addChild(actions, attackButton);
 
@@ -313,13 +323,14 @@ export default class Render{
 		dom.addChild(actions, endGame);
 	}
 
-	populateBackdrop(monsters){
+	populateBackdrop(monsters, player){
 		let backdrop = dom.findByClass('.backdrop');
 		monsters.forEach(monster => {
 			let sprite = dom.createEl();
 			dom.setClass(sprite, 'portraitMonster');
 			dom.setBackground(sprite, monster.type);
 			dom.addChild(backdrop, sprite);
+			dom.addListener(sprite, 'click', ()=> monster.attacked(player));
 		});
 	}
 
@@ -333,7 +344,7 @@ export default class Render{
 		this.populateTurnOrder(turnOrder);
 		this.populateInventory(player);
 		this.populateActions(player);
-		this.populateBackdrop(monsters);
+		this.populateBackdrop(monsters, player);
 
 	}
 

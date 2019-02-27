@@ -1,6 +1,11 @@
 import _classCallCheck from "@babel/runtime/helpers/classCallCheck";
 import _createClass from "@babel/runtime/helpers/createClass";
 import Helper from './helper.js';
+import Render from './render.js';
+import Dom from './dom.js';
+import { player } from './app.js';
+var render = new Render();
+var dom = new Dom();
 
 var Character =
 /*#__PURE__*/
@@ -18,6 +23,7 @@ function () {
     this.weaponQual = 'Poor';
     this.hp = this.attributes.maxHP;
     this.name = '';
+    this.attacking = false;
   } // Static Methods
 
 
@@ -103,13 +109,16 @@ function () {
 
   }, {
     key: "takePotion",
-    value: function takePotion() {
-      console.log('take potion');
+    value: function takePotion(id) {
+      this.hp = this.attributes.maxHP;
+      render.removePotion(id);
     }
   }, {
     key: "attack",
     value: function attack() {
-      console.log('player attack');
+      player.attacking = true;
+      var attackButton = dom.findById('attackButton');
+      dom.setText(attackButton, 'Select a Target');
     }
   }, {
     key: "escape",
