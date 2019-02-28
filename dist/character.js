@@ -3,11 +3,7 @@ import _asyncToGenerator from "@babel/runtime/helpers/asyncToGenerator";
 import _classCallCheck from "@babel/runtime/helpers/classCallCheck";
 import _createClass from "@babel/runtime/helpers/createClass";
 import Helper from './helper.js';
-import Render from './render.js';
-import Dom from './dom.js';
-import { player, attackTurn, resetMonsterSprites, battleField, endFloor } from './app.js';
-var render = new Render();
-var dom = new Dom();
+import { render, dom, player, attackTurn, resetMonsterSprites, battleField, endFloor } from './app.js';
 
 var Character =
 /*#__PURE__*/
@@ -176,17 +172,15 @@ function () {
       }
 
       return attackMonster;
-    }() // attack(){
-    // 	console.log('players turn');
-    // 	player.attacking = true;
-    // 	let attackButton = dom.findById('attackButton');
-    // 	dom.setText(attackButton, 'Select a Target');
-    // }
-
+    }()
   }, {
     key: "escape",
     value: function escape() {
-      console.log('player escape');
+      if (player.attacking) {
+        console.log('player escape');
+      } else {
+        console.log('Not players turn');
+      }
     }
   }]);
 

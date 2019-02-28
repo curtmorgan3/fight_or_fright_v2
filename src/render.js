@@ -1,8 +1,5 @@
-import Dom from './dom.js';
 import Helper from './helper.js';
-import {chooseCharacter, chooseName, startFloor, endFloor, gameOver, playAgain} from './app.js';
-
-let dom = new Dom();
+import {dom, chooseCharacter, chooseName, startFloor, endFloor, gameOver, playAgain} from './app.js';
 
 export default class Render{
 
@@ -309,6 +306,7 @@ export default class Render{
 
 		let escapeButton = dom.createButton('Escape');
 		dom.setClass(escapeButton, 'actionButton');
+		dom.setId(escapeButton, 'escapeButton');
 		dom.addListener(escapeButton, 'click', player.escape);
 		dom.addChild(actions, escapeButton);
 		// Temporary Buttons

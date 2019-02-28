@@ -1,6 +1,6 @@
 import Helper from './helper.js';
-import Dom from './dom.js';
-let dom = new Dom();
+import { battleField, player, gameOver, render, dom } from './app.js';
+
 
 export default class Monster{
 	constructor(playerLevel, type){
@@ -10,7 +10,6 @@ export default class Monster{
 		this.weapon = this.setWeapon();
 		this.hp = this.attributes.maxHP;
 		this.id = Helper.randNumber(10000);
-		this.attacking = false;
 	}
 
 
@@ -82,16 +81,21 @@ export default class Monster{
 		return Math.ceil(Helper.randNumber(this.attributes.str) / 2);
 	}
 
-	async attack(player){
-		let next = 0;
-		if(player.attacking){
-			this.attacking = false;
-		}else{
-			console.log(`Monster ${this.id} attacks`);
-			let sprite = dom.findById(this.id);
-			dom.setClass(sprite, 'attackingSprite');
+	async attack(){
+		console.log(`Monster ${this.id} attacks`);
+		let sprite = dom.findById(this.id);
+		dom.setClass(sprite, 'attackingSprite');
 
+		let hit = Helper.determineHit(this, player);
+		if(hit){
+			let damage = Helper.determineDamage(this, player);
+			player.hp -= damage;
+			render.populatePlayerRow(player);
+			if(player.hp < 1){
+				gameOver();
+			}
 		}
+
 		await Helper.sleep(2000);
 	}
 

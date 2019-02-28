@@ -1,9 +1,5 @@
 import Helper from './helper.js';
-import Render from './render.js';
-import Dom from './dom.js';
-import {player, attackTurn, resetMonsterSprites, battleField, endFloor} from './app.js';
-let render = new Render();
-let dom = new Dom();
+import {render, dom, player, attackTurn, resetMonsterSprites, battleField, endFloor} from './app.js';
 
 export default class Character{
 	constructor(type){
@@ -115,7 +111,6 @@ export default class Character{
 					}
 				}
 			}
-
 			dom.setText(attackButton, 'Wait');
 			player.went = true;
 			player.attacking = false;
@@ -126,14 +121,12 @@ export default class Character{
 		}
 	}
 
-	// attack(){
-	// 	console.log('players turn');
-	// 	player.attacking = true;
-	// 	let attackButton = dom.findById('attackButton');
-	// 	dom.setText(attackButton, 'Select a Target');
-	// }
-
 	escape(){
-		console.log('player escape');
+		if(player.attacking){
+			console.log('player escape');
+		}else{
+			console.log('Not players turn');
+		}
+
 	}
 }

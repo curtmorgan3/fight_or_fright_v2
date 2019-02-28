@@ -66,12 +66,14 @@ function _attackTurn() {
   _attackTurn = _asyncToGenerator(
   /*#__PURE__*/
   _regeneratorRuntime.mark(function _callee(n) {
-    var i, attackButton, _attackButton;
-
+    var attackButton, escapeButton, i;
     return _regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
+            attackButton = dom.findById('attackButton');
+            escapeButton = dom.findById('escapeButton');
+
             if (player.went && Helper.findPosition(player.id, battleField.turnOrder) !== battleField.turnOrder.length - 1) {
               n = Helper.findPosition(player.id, battleField.turnOrder) + 1;
               player.went = false;
@@ -81,44 +83,44 @@ function _attackTurn() {
 
             i = n;
 
-          case 2:
+          case 4:
             if (!(i < battleField.turnOrder.length)) {
-              _context.next = 19;
+              _context.next = 21;
               break;
             }
 
             if (!(battleField.turnOrder[i].id === 'player')) {
-              _context.next = 10;
+              _context.next = 12;
               break;
             }
 
-            attackButton = dom.findById('attackButton');
             dom.setText(attackButton, 'Select a Target');
+            dom.setText(escapeButton, 'Escape');
             player.attacking = true;
             i = battleField.turnOrder.length + 1;
-            _context.next = 16;
+            _context.next = 18;
             break;
 
-          case 10:
+          case 12:
             player.attacking = false;
-            _attackButton = dom.findById('attackButton');
-            dom.setText(_attackButton, 'Wait');
-            _context.next = 15;
+            dom.setText(attackButton, 'Wait');
+            dom.setText(escapeButton, 'Wait');
+            _context.next = 17;
             return battleField.turnOrder[i].attack(battleField.turnOrder[i].id, player);
 
-          case 15:
+          case 17:
             if (i === battleField.turnOrder.length - 1) {
               console.log('start again');
               resetMonsterSprites();
               attackTurn();
             }
 
-          case 16:
+          case 18:
             i++;
-            _context.next = 2;
+            _context.next = 4;
             break;
 
-          case 19:
+          case 21:
           case "end":
             return _context.stop();
         }
@@ -129,4 +131,4 @@ function _attackTurn() {
 }
 
 startGame();
-export { player, battleField };
+export { render, dom, player, battleField };

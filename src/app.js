@@ -6,7 +6,7 @@ import BattleField from './battleField.js';
 
 let render = new Render();
 let dom = new Dom();
-let floor = 5;
+let floor = 1;
 let player = {};
 let monsters = [];
 let turnOrder = [];
@@ -65,6 +65,8 @@ export function resetMonsterSprites(){
 }
 
 export async function attackTurn(n){
+	let attackButton = dom.findById('attackButton');
+	let escapeButton = dom.findById('escapeButton');
 	if(player.went && Helper.findPosition(player.id, battleField.turnOrder) !== battleField.turnOrder.length -1){
 		n = Helper.findPosition(player.id, battleField.turnOrder) + 1;
 		player.went = false;
@@ -73,14 +75,14 @@ export async function attackTurn(n){
 	}
 	for(let i = n; i<battleField.turnOrder.length; i++){
 		if(battleField.turnOrder[i].id === 'player'){
-			let attackButton = dom.findById('attackButton');
 			dom.setText(attackButton, 'Select a Target');
+			dom.setText(escapeButton, 'Escape');
 			player.attacking = true;
 			i = battleField.turnOrder.length + 1;
 		}else {
 			player.attacking = false;
-			let attackButton = dom.findById('attackButton');
 			dom.setText(attackButton, 'Wait');
+			dom.setText(escapeButton, 'Wait');
 			await battleField.turnOrder[i].attack(battleField.turnOrder[i].id, player);
 			if(i === battleField.turnOrder.length - 1){
 				console.log('start again');
@@ -95,6 +97,8 @@ export async function attackTurn(n){
 startGame();
 
 export {
+	render,
+	dom,
 	player,
 	battleField
 }
