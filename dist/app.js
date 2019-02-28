@@ -7,7 +7,7 @@ import Helper from './helper.js';
 import BattleField from './battleField.js';
 var render = new Render();
 var dom = new Dom();
-var floor = 5;
+var floor = 1;
 var player = {};
 var monsters = [];
 var turnOrder = [];

@@ -277,22 +277,25 @@ export default class Render{
 	populateInventory(player){
 		let inventory = dom.findByClass('.inventory');
 		dom.clear(inventory);
+		if(player.inventory.length > 0){
+			player.inventory.forEach(item => {
+				let invenItem = dom.createEl();
+				dom.setBackground(invenItem, 'healthPotion');
+				dom.setClass(invenItem, 'playerInventoryItem');
+				let id = Helper.randNumber(10000);
+				dom.setId(invenItem, id);
+				dom.addListener(invenItem, 'click', ()=> player.takePotion(id));
+				dom.addChild(inventory, invenItem);
+			});
+		}
 
-		player.inventory.forEach(item => {
-			let invenItem = dom.createEl();
-			dom.setBackground(invenItem, 'healthPotion');
-			dom.setClass(invenItem, 'playerInventoryItem');
-			let id = Helper.randNumber(10000);
-			dom.setId(invenItem, id);
-			dom.addListener(invenItem, 'click', ()=> player.takePotion(id));
-			dom.addChild(inventory, invenItem);
-		});
 	}
 
-	removePotion(id){
+	removePotion(id, player){
 		let potion = dom.findById(id);
 		let inventory = dom.findByClass('.inventory');
 		inventory.removeChild(potion);
+		this.populatePlayerRow(player);
 	}
 
 	populateActions(player){

@@ -262,24 +262,28 @@ function () {
     value: function populateInventory(player) {
       var inventory = dom.findByClass('.inventory');
       dom.clear(inventory);
-      player.inventory.forEach(function (item) {
-        var invenItem = dom.createEl();
-        dom.setBackground(invenItem, 'healthPotion');
-        dom.setClass(invenItem, 'playerInventoryItem');
-        var id = Helper.randNumber(10000);
-        dom.setId(invenItem, id);
-        dom.addListener(invenItem, 'click', function () {
-          return player.takePotion(id);
+
+      if (player.inventory.length > 0) {
+        player.inventory.forEach(function (item) {
+          var invenItem = dom.createEl();
+          dom.setBackground(invenItem, 'healthPotion');
+          dom.setClass(invenItem, 'playerInventoryItem');
+          var id = Helper.randNumber(10000);
+          dom.setId(invenItem, id);
+          dom.addListener(invenItem, 'click', function () {
+            return player.takePotion(id);
+          });
+          dom.addChild(inventory, invenItem);
         });
-        dom.addChild(inventory, invenItem);
-      });
+      }
     }
   }, {
     key: "removePotion",
-    value: function removePotion(id) {
+    value: function removePotion(id, player) {
       var potion = dom.findById(id);
       var inventory = dom.findByClass('.inventory');
       inventory.removeChild(potion);
+      this.populatePlayerRow(player);
     }
   }, {
     key: "populateActions",

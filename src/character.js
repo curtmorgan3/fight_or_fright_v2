@@ -89,7 +89,14 @@ export default class Character{
 
 	takePotion(id){
 		this.hp = this.attributes.maxHP;
-		render.removePotion(id);
+		if(player.inventory.length === 2){
+			player.inventory = ['potion'];
+		}else if (player.inventory.length > 2){
+			player.inventory = player.inventory.pop();
+		}else {
+			player.inventory = [];
+		}
+		render.removePotion(id, player);
 	}
 
 	async attackMonster(id){

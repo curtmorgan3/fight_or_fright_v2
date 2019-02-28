@@ -360,6 +360,10 @@
 		min-height: 250px;
 		min-width: 250px;
 	}
+	.attackingSprite{
+		min-height: 250px;
+		min-width: 250px;
+	}
 	.portraitOrder{
 	  min-height: 200px;
 	  min-width: 200px;
