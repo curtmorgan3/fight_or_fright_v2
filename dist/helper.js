@@ -17,6 +17,11 @@ function () {
       return Math.floor(Math.random() * Math.floor(n) + 1);
     }
   }, {
+    key: "d20",
+    value: function d20() {
+      return this.randNumber(20);
+    }
+  }, {
     key: "generateMonsters",
     value: function generateMonsters(floor, player) {
       var monsterTypes = ['ghost', 'skeleton', 'vampire', 'werewolf', 'zombie'];
@@ -85,6 +90,48 @@ function () {
 
       return sleep;
     }()
+  }, {
+    key: "findPosition",
+    value: function findPosition(id, array) {
+      var n = 0;
+
+      for (var i = 0; i < array.length; i++) {
+        if (array[i].id === id) {
+          n = i;
+        }
+
+        ;
+      }
+
+      return n;
+    }
+  }, {
+    key: "determineHit",
+    value: function determineHit(attacker, defender) {
+      console.log(attacker);
+      console.log(defender);
+      var attackRoll = this.d20() + attacker.getModifier(attacker.attributes.dex);
+
+      if (attackRoll > defender.attributes.ac) {
+        console.log("".concat(attackRoll, " > ").concat(defender.attributes.ac, ". Hit"));
+        return true;
+      } else {
+        console.log('Miss');
+        return false;
+      }
+    }
+  }, {
+    key: "determineDamage",
+    value: function determineDamage(attacker, defender) {
+      var damage = this.randNumber(attacker.weapon) + attacker.getModifier(attacker.attributes.str);
+
+      if (damage < 1) {
+        damage = 1;
+      }
+
+      ;
+      return damage;
+    }
   }]);
 
   return Helper;

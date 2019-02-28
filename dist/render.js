@@ -251,6 +251,7 @@ function () {
     key: "populateTurnOrder",
     value: function populateTurnOrder(turnOrder) {
       var order = dom.findByClass('.order');
+      dom.clear(order);
       turnOrder.forEach(function (pos) {
         var sprite = dom.createEl();
         dom.setClass(sprite, 'portraitOrder');
@@ -287,10 +288,9 @@ function () {
     value: function populateActions(player) {
       var actions = dom.findByClass('.actions');
       dom.clear(actions);
-      var attackButton = dom.createButton('Attack');
+      var attackButton = dom.createButton('Wait');
       dom.setClass(attackButton, 'actionButton');
       dom.setId(attackButton, 'attackButton');
-      dom.addListener(attackButton, 'click', player.attack);
       dom.addChild(actions, attackButton);
       var escapeButton = dom.createButton('Escape');
       dom.setClass(escapeButton, 'actionButton');
@@ -310,6 +310,7 @@ function () {
     key: "populateBackdrop",
     value: function populateBackdrop(monsters, player) {
       var backdrop = dom.findByClass('.backdrop');
+      dom.clear(backdrop);
       monsters.forEach(function (monster) {
         var sprite = dom.createEl();
         dom.setClass(sprite, 'portraitMonster');

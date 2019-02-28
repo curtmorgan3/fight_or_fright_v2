@@ -2,12 +2,15 @@ import Render from './render.js';
 import Character from './character.js';
 import Dom from './dom.js';
 import Helper from './helper.js';
+import BattleField from './battleField.js';
 
 let render = new Render();
 let dom = new Dom();
-let player;
-let floor = 4;
+let floor = 5;
+let player = {};
+let monsters = [];
 let turnOrder = [];
+let battleField = {};
 
 export function chooseCharacter(type){
 	player = new Character(type);
@@ -22,6 +25,7 @@ export function chooseName(name){
 export function startFloor(){
 	let monsters = Helper.generateMonsters(floor, player);
 	turnOrder = Helper.determineTurnOrder(player, monsters);
+	battleField = new BattleField(turnOrder, monsters);
 	render.populateFloor(player, turnOrder, monsters);
 	attackTurn();
 }
@@ -35,29 +39,6 @@ export function gameOver(){
 	render.gameOver(player, floor);
 }
 
-// Not sure if I need this one yet
-//
-// function playerInMiddle(){
-// 	let n = findPlayerPosition();
-// 	if(n != 0 && n != (turnOrder.length - 1)){
-// 		console.log('player is in middle');
-// 		return true;
-// 	}else {
-// 		console.log('player not in middle');
-// 		return false;
-// 	}
-// }
-
-function findPlayerPosition(){
-	let n = 0;
-	for(let i = 0; i<turnOrder.length; i++){
-		if(turnOrder[i].id === 'player'){
-			n = i;
-		};
-	}
-	return n;
-}
-
 export function playAgain(){
 	floor = 1;
 	player = {};
@@ -69,28 +50,41 @@ export function playAgain(){
 }
 
 function startGame(){
-	render.floor();
 	render.playArea();
 	render.welcome();
 }
 
+export function resetMonsterSprites(){
+	console.log('sprite reset');
+	turnOrder.forEach(character => {
+		if(character.id !== 'player'){
+			let sprite = dom.findById(character.id);
+			dom.setClass(sprite, 'portraitMonster');
+		}
+	});
+}
+
 export async function attackTurn(n){
-	if(player.went && findPlayerPosition() !== turnOrder.length -1){
-		n = findPlayerPosition() + 1;
+	if(player.went && Helper.findPosition(player.id, battleField.turnOrder) !== battleField.turnOrder.length -1){
+		n = Helper.findPosition(player.id, battleField.turnOrder) + 1;
 		player.went = false;
 	}else{
 		n = 0;
 	}
-	let interval = 5 * 1000;
-	for(let i = n; i<turnOrder.length; i++){
-		if(turnOrder[i].id === 'player'){
+	for(let i = n; i<battleField.turnOrder.length; i++){
+		if(battleField.turnOrder[i].id === 'player'){
+			let attackButton = dom.findById('attackButton');
+			dom.setText(attackButton, 'Select a Target');
 			player.attacking = true;
-			i = turnOrder.length + 1;
+			i = battleField.turnOrder.length + 1;
 		}else {
 			player.attacking = false;
-			await turnOrder[i].attack(turnOrder[i].id, player);
-			if(i === turnOrder.length - 1){
+			let attackButton = dom.findById('attackButton');
+			dom.setText(attackButton, 'Wait');
+			await battleField.turnOrder[i].attack(battleField.turnOrder[i].id, player);
+			if(i === battleField.turnOrder.length - 1){
 				console.log('start again');
+				resetMonsterSprites();
 				attackTurn();
 			}
 		}
@@ -101,5 +95,6 @@ export async function attackTurn(n){
 startGame();
 
 export {
-	player
+	player,
+	battleField
 }

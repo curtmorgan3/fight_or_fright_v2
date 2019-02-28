@@ -267,6 +267,7 @@ export default class Render{
 
 	populateTurnOrder(turnOrder){
 		let order = dom.findByClass('.order');
+		dom.clear(order);
 		turnOrder.forEach(pos => {
 			let sprite = dom.createEl();
 			dom.setClass(sprite, 'portraitOrder');
@@ -301,10 +302,9 @@ export default class Render{
 		let actions = dom.findByClass('.actions');
 		dom.clear(actions);
 
-		let attackButton = dom.createButton('Attack');
+		let attackButton = dom.createButton('Wait');
 		dom.setClass(attackButton, 'actionButton');
 		dom.setId(attackButton, 'attackButton');
-		dom.addListener(attackButton, 'click', player.attack);
 		dom.addChild(actions, attackButton);
 
 		let escapeButton = dom.createButton('Escape');
@@ -325,6 +325,7 @@ export default class Render{
 
 	populateBackdrop(monsters, player){
 		let backdrop = dom.findByClass('.backdrop');
+		dom.clear(backdrop);
 		monsters.forEach(monster => {
 			let sprite = dom.createEl();
 			dom.setClass(sprite, 'portraitMonster');

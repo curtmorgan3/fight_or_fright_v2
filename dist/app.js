@@ -4,11 +4,14 @@ import Render from './render.js';
 import Character from './character.js';
 import Dom from './dom.js';
 import Helper from './helper.js';
+import BattleField from './battleField.js';
 var render = new Render();
 var dom = new Dom();
-var player;
-var floor = 4;
+var floor = 5;
+var player = {};
+var monsters = [];
 var turnOrder = [];
+var battleField = {};
 export function chooseCharacter(type) {
   player = new Character(type);
   render.name(player.type);
@@ -20,6 +23,7 @@ export function chooseName(name) {
 export function startFloor() {
   var monsters = Helper.generateMonsters(floor, player);
   turnOrder = Helper.determineTurnOrder(player, monsters);
+  battleField = new BattleField(turnOrder, monsters);
   render.populateFloor(player, turnOrder, monsters);
   attackTurn();
 }
@@ -29,33 +33,7 @@ export function endFloor() {
 }
 export function gameOver() {
   render.gameOver(player, floor);
-} // Not sure if I need this one yet
-//
-// function playerInMiddle(){
-// 	let n = findPlayerPosition();
-// 	if(n != 0 && n != (turnOrder.length - 1)){
-// 		console.log('player is in middle');
-// 		return true;
-// 	}else {
-// 		console.log('player not in middle');
-// 		return false;
-// 	}
-// }
-
-function findPlayerPosition() {
-  var n = 0;
-
-  for (var i = 0; i < turnOrder.length; i++) {
-    if (turnOrder[i].id === 'player') {
-      n = i;
-    }
-
-    ;
-  }
-
-  return n;
 }
-
 export function playAgain() {
   floor = 1;
   player = {};
@@ -67,11 +45,19 @@ export function playAgain() {
 }
 
 function startGame() {
-  render.floor();
   render.playArea();
   render.welcome();
 }
 
+export function resetMonsterSprites() {
+  console.log('sprite reset');
+  turnOrder.forEach(function (character) {
+    if (character.id !== 'player') {
+      var sprite = dom.findById(character.id);
+      dom.setClass(sprite, 'portraitMonster');
+    }
+  });
+}
 export function attackTurn(_x) {
   return _attackTurn.apply(this, arguments);
 }
@@ -80,54 +66,59 @@ function _attackTurn() {
   _attackTurn = _asyncToGenerator(
   /*#__PURE__*/
   _regeneratorRuntime.mark(function _callee(n) {
-    var interval, i;
+    var i, attackButton, _attackButton;
+
     return _regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            if (player.went && findPlayerPosition() !== turnOrder.length - 1) {
-              n = findPlayerPosition() + 1;
+            if (player.went && Helper.findPosition(player.id, battleField.turnOrder) !== battleField.turnOrder.length - 1) {
+              n = Helper.findPosition(player.id, battleField.turnOrder) + 1;
               player.went = false;
             } else {
               n = 0;
             }
 
-            interval = 5 * 1000;
             i = n;
 
-          case 3:
-            if (!(i < turnOrder.length)) {
-              _context.next = 16;
+          case 2:
+            if (!(i < battleField.turnOrder.length)) {
+              _context.next = 19;
               break;
             }
 
-            if (!(turnOrder[i].id === 'player')) {
-              _context.next = 9;
+            if (!(battleField.turnOrder[i].id === 'player')) {
+              _context.next = 10;
               break;
             }
 
+            attackButton = dom.findById('attackButton');
+            dom.setText(attackButton, 'Select a Target');
             player.attacking = true;
-            i = turnOrder.length + 1;
-            _context.next = 13;
+            i = battleField.turnOrder.length + 1;
+            _context.next = 16;
             break;
 
-          case 9:
+          case 10:
             player.attacking = false;
-            _context.next = 12;
-            return turnOrder[i].attack(turnOrder[i].id, player);
+            _attackButton = dom.findById('attackButton');
+            dom.setText(_attackButton, 'Wait');
+            _context.next = 15;
+            return battleField.turnOrder[i].attack(battleField.turnOrder[i].id, player);
 
-          case 12:
-            if (i === turnOrder.length - 1) {
+          case 15:
+            if (i === battleField.turnOrder.length - 1) {
               console.log('start again');
+              resetMonsterSprites();
               attackTurn();
             }
 
-          case 13:
+          case 16:
             i++;
-            _context.next = 3;
+            _context.next = 2;
             break;
 
-          case 16:
+          case 19:
           case "end":
             return _context.stop();
         }
@@ -138,4 +129,4 @@ function _attackTurn() {
 }
 
 startGame();
-export { player };
+export { player, battleField };

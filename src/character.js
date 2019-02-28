@@ -1,7 +1,7 @@
 import Helper from './helper.js';
 import Render from './render.js';
 import Dom from './dom.js';
-import {player, attackTurn} from './app.js';
+import {player, attackTurn, resetMonsterSprites, battleField, endFloor} from './app.js';
 let render = new Render();
 let dom = new Dom();
 
@@ -19,7 +19,7 @@ export default class Character{
 		this.hp = this.attributes.maxHP;
 		this.name = '';
 		this.attacking = false;
-		this.went = false; 
+		this.went = false;
 	}
 
 	// Static Methods
@@ -98,26 +98,40 @@ export default class Character{
 
 	async attackMonster(id){
 		if(player.attacking){
-			console.log(`player attacks ${id}`);
-			let attackButton = dom.findById('attackButton');
-			dom.setText(attackButton, 'Attack');
+			let defenderPos = Helper.findPosition(id, battleField.turnOrder);
+			let defender = battleField.turnOrder[defenderPos];
+			let hit = Helper.determineHit(player, defender);
+			if(hit){
+				let damage = Helper.determineDamage(player, defender);
+				defender.hp -= damage;
+				if(defender.hp < 1){
+					battleField.turnOrder = battleField.turnOrder.filter(monster => monster.id !== id);
+					if(battleField.turnOrder.length === 1){
+						endFloor();
+					}else {
+						render.populateTurnOrder(battleField.turnOrder);
+						battleField.monsters = battleField.monsters.filter(monster => monster.id !== id);
+						render.populateBackdrop(battleField.monsters, player);
+					}
+				}
+			}
+
+			dom.setText(attackButton, 'Wait');
 			player.went = true;
 			player.attacking = false;
+			resetMonsterSprites();
 			attackTurn();
 		}else {
 			console.log('Not players turn');
 		}
-
 	}
 
-	attack(){
-		console.log('players turn');
-		player.attacking = true;
-		if(player.attacking){
-			let attackButton = dom.findById('attackButton');
-			dom.setText(attackButton, 'Select a Target');
-		}
-	}
+	// attack(){
+	// 	console.log('players turn');
+	// 	player.attacking = true;
+	// 	let attackButton = dom.findById('attackButton');
+	// 	dom.setText(attackButton, 'Select a Target');
+	// }
 
 	escape(){
 		console.log('player escape');

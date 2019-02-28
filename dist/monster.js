@@ -101,7 +101,7 @@ function () {
       }
 
       var diff = this.level - playerLevel;
-      attributes.ac = this.getModifier(attributes.speed) + 5 + diff;
+      attributes.ac = this.getModifier(attributes.speed) + 10 + diff;
       attributes.initiative = this.getModifier(attributes.speed) + 5 + diff;
       attributes.maxHP = attributes.maxHP + 10 + this.getModifier(attributes.fort) + diff;
       return attributes;
@@ -133,7 +133,7 @@ function () {
                 }
 
                 _context.next = 4;
-                return Helper.sleep(5000);
+                return Helper.sleep(2000);
 
               case 4:
               case "end":
@@ -148,18 +148,7 @@ function () {
       }
 
       return attack;
-    }() // attacked(player){
-    // 	if(player.attacking){
-    // 		player.attacking = false;
-    // 		let attackButton = dom.findById('attackButton');
-    // 		dom.setText(attackButton, 'Attack');
-    // 		return(this.id);
-    // 	}else{
-    // 		console.log('player not attacking');
-    //
-    // 	}
-    // }
-
+    }()
   }]);
 
   return Monster;

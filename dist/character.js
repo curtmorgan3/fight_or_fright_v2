@@ -5,7 +5,7 @@ import _createClass from "@babel/runtime/helpers/createClass";
 import Helper from './helper.js';
 import Render from './render.js';
 import Dom from './dom.js';
-import { player, attackTurn } from './app.js';
+import { player, attackTurn, resetMonsterSprites, battleField, endFloor } from './app.js';
 var render = new Render();
 var dom = new Dom();
 
@@ -123,17 +123,41 @@ function () {
       var _attackMonster = _asyncToGenerator(
       /*#__PURE__*/
       _regeneratorRuntime.mark(function _callee(id) {
-        var attackButton;
+        var defenderPos, defender, hit, damage;
         return _regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
                 if (player.attacking) {
-                  console.log("player attacks ".concat(id));
-                  attackButton = dom.findById('attackButton');
-                  dom.setText(attackButton, 'Attack');
+                  defenderPos = Helper.findPosition(id, battleField.turnOrder);
+                  defender = battleField.turnOrder[defenderPos];
+                  hit = Helper.determineHit(player, defender);
+
+                  if (hit) {
+                    damage = Helper.determineDamage(player, defender);
+                    defender.hp -= damage;
+
+                    if (defender.hp < 1) {
+                      battleField.turnOrder = battleField.turnOrder.filter(function (monster) {
+                        return monster.id !== id;
+                      });
+
+                      if (battleField.turnOrder.length === 1) {
+                        endFloor();
+                      } else {
+                        render.populateTurnOrder(battleField.turnOrder);
+                        battleField.monsters = battleField.monsters.filter(function (monster) {
+                          return monster.id !== id;
+                        });
+                        render.populateBackdrop(battleField.monsters, player);
+                      }
+                    }
+                  }
+
+                  dom.setText(attackButton, 'Wait');
                   player.went = true;
                   player.attacking = false;
+                  resetMonsterSprites();
                   attackTurn();
                 } else {
                   console.log('Not players turn');
@@ -152,18 +176,13 @@ function () {
       }
 
       return attackMonster;
-    }()
-  }, {
-    key: "attack",
-    value: function attack() {
-      console.log('players turn');
-      player.attacking = true;
+    }() // attack(){
+    // 	console.log('players turn');
+    // 	player.attacking = true;
+    // 	let attackButton = dom.findById('attackButton');
+    // 	dom.setText(attackButton, 'Select a Target');
+    // }
 
-      if (player.attacking) {
-        var attackButton = dom.findById('attackButton');
-        dom.setText(attackButton, 'Select a Target');
-      }
-    }
   }, {
     key: "escape",
     value: function escape() {

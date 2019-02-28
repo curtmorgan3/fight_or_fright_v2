@@ -71,7 +71,7 @@ export default class Monster{
 	    break;
 		}
 		let diff = this.level - playerLevel;
-		attributes.ac = this.getModifier(attributes.speed) + 5 + diff;
+		attributes.ac = this.getModifier(attributes.speed) + 10 + diff;
 		attributes.initiative = this.getModifier(attributes.speed) + 5 + diff;
 		attributes.maxHP = attributes.maxHP + 10 + this.getModifier(attributes.fort) + diff;
 
@@ -92,19 +92,8 @@ export default class Monster{
 			dom.setClass(sprite, 'attackingSprite');
 
 		}
-		await Helper.sleep(5000);
+		await Helper.sleep(2000);
 	}
 
-	// attacked(player){
-	// 	if(player.attacking){
-	// 		player.attacking = false;
-	// 		let attackButton = dom.findById('attackButton');
-	// 		dom.setText(attackButton, 'Attack');
-	// 		return(this.id);
-	// 	}else{
-	// 		console.log('player not attacking');
-	//
-	// 	}
-	// }
 
 }

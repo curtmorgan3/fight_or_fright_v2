@@ -4,6 +4,10 @@ export default class Helper{
 
 	static randNumber(n){
 		return Math.floor(Math.random() * Math.floor(n) + 1);
+	};
+
+	static d20(){
+		return this.randNumber(20);
 	}
 
 	static generateMonsters(floor, player){
@@ -45,7 +49,37 @@ export default class Helper{
 
 	static async sleep(milliseconds){
 		return new Promise(resolve => setTimeout(resolve, milliseconds));
+	};
+
+	static findPosition(id, array){
+		let n = 0;
+		for(let i = 0; i<array.length; i++){
+			if(array[i].id === id){
+				n = i;
+			};
+		}
+		return n;
 	}
 
+	static determineHit(attacker, defender){
+		console.log(attacker);
+		console.log(defender);
+		let attackRoll = this.d20() + attacker.getModifier(attacker.attributes.dex);
+		if(attackRoll > defender.attributes.ac){
+			console.log(`${attackRoll} > ${defender.attributes.ac}. Hit`);
+			return true;
+		}else{
+			console.log('Miss');
+			return false;
+		}
+	};
+
+	static determineDamage(attacker, defender){
+		let damage = this.randNumber(attacker.weapon) + attacker.getModifier(attacker.attributes.str);
+		if (damage < 1){
+			damage = 1;
+		};
+		return damage;
+	};
 
 }
