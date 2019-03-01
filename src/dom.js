@@ -14,6 +14,9 @@ export default class Dom{
 	createEl(){
 		return document.createElement('div');
 	}
+	destroyEl(el){
+		return el.parentNode.removeChild(el);
+	}
 
 	setClass(parent, className){
 		parent.className = `${className}`;

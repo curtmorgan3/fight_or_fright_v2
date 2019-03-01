@@ -100,11 +100,17 @@ export default class Character{
 	}
 
 	async attackMonster(id){
+		let defenderContainer = dom.findById(id);
+		let defenderBanner = defenderContainer.querySelector('.monsterBanner');
+		let floor = dom.findByClass('.floor');
+		let overlay = dom.createEl();
+		dom.setClass(overlay, 'overlay');
+
 		if(player.attacking){
+			dom.addChild(floor, overlay);
 			let defenderPos = Helper.findPosition(id, battleField.turnOrder);
 			let defender = battleField.turnOrder[defenderPos];
-			let defenderContainer = dom.findById(id);
-			let defenderBanner = defenderContainer.querySelector('.monsterBanner');
+
 			dom.setText(defenderBanner, `${player.name} attacks!`);
 			await Helper.sleep(2000);
 
@@ -139,6 +145,7 @@ export default class Character{
 		}else {
 			console.log('Not players turn');
 		}
+		dom.destroyEl(overlay);
 	}
 
 	escape(){
@@ -147,6 +154,5 @@ export default class Character{
 		}else{
 			console.log('Not players turn');
 		}
-
 	}
 }

@@ -24,6 +24,11 @@ function () {
       return document.createElement('div');
     }
   }, {
+    key: "destroyEl",
+    value: function destroyEl(el) {
+      return el.parentNode.removeChild(el);
+    }
+  }, {
     key: "setClass",
     value: function setClass(parent, className) {
       parent.className = "".concat(className);

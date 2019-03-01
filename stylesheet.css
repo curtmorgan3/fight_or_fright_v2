@@ -2,6 +2,16 @@
   font-family: 'Amatic SC', cursive;
   font-size:25px;
 }
+.overlay {
+    background-color: rgba(1, 1, 1, 0);
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+		height: 100%;
+		width: 100%;
+}
 
 .floor{
 	width: 100vw;
@@ -230,6 +240,7 @@
 	align-items: flex-start;
 	justify-content: flex-start;
 }
+
 .monsterBanner{
 	height: 50%;
 	width: 100%;
