@@ -3,7 +3,7 @@ import _asyncToGenerator from "@babel/runtime/helpers/asyncToGenerator";
 import _classCallCheck from "@babel/runtime/helpers/classCallCheck";
 import _createClass from "@babel/runtime/helpers/createClass";
 import Monster from './monster.js';
-import { player, render } from './app.js';
+import { player, render, battleField } from './app.js';
 
 var Helper =
 /*#__PURE__*/
@@ -24,21 +24,21 @@ function () {
     }
   }, {
     key: "generateMonsters",
-    value: function generateMonsters(floor, player) {
+    value: function generateMonsters(player) {
       var monsterTypes = ['ghost', 'skeleton', 'vampire', 'werewolf', 'zombie'];
       var monsters = [];
       var coinToss = this.randNumber(2); // Determine how many monsters to create and push them to monsters
 
-      if (floor === 1) {
+      if (battleField.floor === 1) {
         var monster = new Monster(player.level, monsterTypes[this.randNumber(5) - 1]);
         monsters.push(monster);
       } else {
         var n;
 
         if (coinToss === 1) {
-          n = floor + 1;
+          n = battleField.floor + 1;
         } else {
-          n = floor - 1;
+          n = battleField.floor - 1;
         }
 
         for (var i = 0; i < n; i++) {
@@ -135,8 +135,8 @@ function () {
     }
   }, {
     key: "xp",
-    value: function xp(player, monster) {
-      var xp = monster.level * this.randNumber(300) + this.randNumber(100) * player.getModifier(player.attributes.luck);
+    value: function xp(player, monsterLevel) {
+      var xp = monsterLevel * this.randNumber(300) + this.randNumber(100) * player.getModifier(player.attributes.luck);
 
       if (xp < 1) {
         xp = 1;
@@ -163,7 +163,7 @@ function () {
     }
   }, {
     key: "increaseSkill",
-    value: function increaseSkill(skill, newLevels, floor) {
+    value: function increaseSkill(skill, newLevels) {
       switch (skill) {
         case 'Strength':
           if (player.type === 'knight') {
@@ -211,7 +211,7 @@ function () {
           break;
       }
 
-      render.endFloor(floor, newLevels);
+      render.endFloor(newLevels);
     }
   }]);
 

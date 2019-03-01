@@ -1,5 +1,5 @@
 import Monster from './monster.js';
-import {player, render} from './app.js';
+import {player, render, battleField} from './app.js';
 
 export default class Helper{
 
@@ -11,21 +11,21 @@ export default class Helper{
 		return this.randNumber(20);
 	}
 
-	static generateMonsters(floor, player){
+	static generateMonsters(player){
 		let monsterTypes = ['ghost', 'skeleton', 'vampire', 'werewolf', 'zombie'];
 		let monsters = [];
 		let coinToss = this.randNumber(2);
 
 		// Determine how many monsters to create and push them to monsters
-		if(floor === 1){
+		if(battleField.floor === 1){
 			let monster = new Monster(player.level, monsterTypes[this.randNumber(5)-1]);
 			monsters.push(monster);
 		}else{
 			let n;
 			if(coinToss === 1){
-				n = floor + 1;
+				n = battleField.floor + 1;
 			}else{
-				n = floor - 1;
+				n = battleField.floor - 1;
 			}
 			for(let i = 0; i<n; i++){
 				let monster = new Monster(player.level, monsterTypes[this.randNumber(5)-1]);
@@ -83,8 +83,8 @@ export default class Helper{
 		return damage;
 	};
 
-	static xp(player, monster){
-		let xp = (monster.level * this.randNumber(300)) + (this.randNumber(100) * player.getModifier(player.attributes.luck));
+	static xp(player, monsterLevel){
+		let xp = (monsterLevel * this.randNumber(300) ) + (this.randNumber(100) * player.getModifier(player.attributes.luck));
 		if(xp < 1){
 			xp = 1;
 		}
@@ -108,7 +108,7 @@ export default class Helper{
 		}
 	}
 
-	static increaseSkill(skill, newLevels, floor){
+	static increaseSkill(skill, newLevels){
 		switch(skill){
 			case 'Strength':
 				if(player.type === 'knight'){
@@ -146,7 +146,7 @@ export default class Helper{
 			}
 			break;
 		}
-		render.endFloor(floor, newLevels);
+		render.endFloor(newLevels);
 	}
 
 }

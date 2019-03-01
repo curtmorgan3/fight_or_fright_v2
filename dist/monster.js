@@ -101,7 +101,12 @@ function () {
       var diff = this.level - playerLevel;
       attributes.ac = this.getModifier(attributes.speed) + 10 + diff;
       attributes.initiative = this.getModifier(attributes.speed) + 5 + diff;
-      attributes.maxHP = attributes.maxHP + 10 + this.getModifier(attributes.fort) + diff;
+      attributes.maxHP = attributes.maxHP + 5 + this.getModifier(attributes.fort) + diff;
+
+      if (attributes.maxHP < 2) {
+        attributes.maxHP = 2;
+      }
+
       return attributes;
     }
   }, {
@@ -120,24 +125,23 @@ function () {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                console.log("Monster ".concat(this.id, " attacks"));
                 monsterContainer = dom.findById(this.id);
                 sprite = monsterContainer.querySelector('.portraitMonster');
                 banner = monsterContainer.querySelector('.monsterBanner');
-                dom.setText(banner, 'Attacking!');
+                dom.setText(banner, "".concat(this.type, " attacks!"));
                 hit = Helper.determineHit(this, player);
 
                 if (!hit) {
-                  _context.next = 16;
+                  _context.next = 15;
                   break;
                 }
 
                 damage = Helper.determineDamage(this, player);
                 player.hp -= damage;
-                _context.next = 11;
+                _context.next = 10;
                 return Helper.sleep(2000);
 
-              case 11:
+              case 10:
                 render.populatePlayerRow(player);
                 dom.setText(banner, "Hit! ".concat(damage, " damage."));
 
@@ -145,24 +149,24 @@ function () {
                   gameOver();
                 }
 
-                _context.next = 19;
+                _context.next = 18;
                 break;
 
-              case 16:
-                _context.next = 18;
+              case 15:
+                _context.next = 17;
                 return Helper.sleep(2000);
 
-              case 18:
+              case 17:
                 dom.setText(banner, 'Miss!');
 
-              case 19:
-                _context.next = 21;
+              case 18:
+                _context.next = 20;
                 return Helper.sleep(1000);
 
-              case 21:
+              case 20:
                 dom.setText(banner, '');
 
-              case 22:
+              case 21:
               case "end":
                 return _context.stop();
             }

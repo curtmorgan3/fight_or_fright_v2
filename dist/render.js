@@ -3,7 +3,7 @@ import _asyncToGenerator from "@babel/runtime/helpers/asyncToGenerator";
 import _classCallCheck from "@babel/runtime/helpers/classCallCheck";
 import _createClass from "@babel/runtime/helpers/createClass";
 import Helper from './helper.js';
-import { dom, chooseCharacter, chooseName, startFloor, endFloor, gameOver, playAgain } from './app.js';
+import { dom, chooseCharacter, battleField, chooseName, startFloor, endFloor, gameOver, playAgain } from './app.js';
 
 var Render =
 /*#__PURE__*/
@@ -197,7 +197,7 @@ function () {
 
   }, {
     key: "prepare",
-    value: function prepare(player, level) {
+    value: function prepare(player) {
       var welcome = dom.findByClass('.welcome');
       dom.clear(welcome);
       var prepareWrapper = dom.createEl();
@@ -210,7 +210,7 @@ function () {
       var stats = dom.createEl();
       dom.setClass(stats, 'prepareStats');
       dom.addChild(prepareWrapper, stats);
-      dom.setHTML(stats, "\n\t\t\t\t<h2>".concat(player.name, ", Level ").concat(player.level, " ").concat(player.type, "</h2>\n\t\t\t\t<h3>Strength: ").concat(player.attributes.str, " / Speed: ").concat(player.attributes.speed, " / Dexterity: ").concat(player.attributes.dex, "</h3>\n\t\t\t\t<h3>Fortitude: ").concat(player.attributes.fort, " / Luck: ").concat(player.attributes.luck, " / Max HP: ").concat(player.attributes.maxHP, "</h3>\n\t\t\t\t<h3>Weapon: ").concat(player.weaponType, " / Quality: ").concat(player.weapon, "\n\t\t\t\t<h2>Floor ").concat(level, "</h2>\n\t\t\t"));
+      dom.setHTML(stats, "\n\t\t\t\t<h2>".concat(player.name, ", Level ").concat(player.level, " ").concat(player.type, "</h2>\n\t\t\t\t<h3>Strength: ").concat(player.attributes.str, " / Speed: ").concat(player.attributes.speed, " / Dexterity: ").concat(player.attributes.dex, "</h3>\n\t\t\t\t<h3>Fortitude: ").concat(player.attributes.fort, " / Luck: ").concat(player.attributes.luck, " / Max HP: ").concat(player.attributes.maxHP, "</h3>\n\t\t\t\t<h3>Weapon: ").concat(player.weaponType, " / Quality: ").concat(player.weapon, "\n\t\t\t\t<h2>Floor ").concat(battleField.floor, "</h2>\n\t\t\t"));
       var submit = dom.createButton('Enter...');
       dom.addListener(submit, 'click', startFloor);
       dom.addChild(prepareWrapper, submit);
@@ -226,7 +226,7 @@ function () {
       dom.addChild(playerRow, playerInfoWrapper);
       var playerHealth = dom.createEl();
       dom.setClass(playerHealth, 'playerRowPlayerHealth');
-      dom.setHTML(playerHealth, "\n\t\t\t\t<h3>".concat(player.hp, "/").concat(player.attributes.maxHP, "</h3>\n\t\t\t"));
+      dom.setHTML(playerHealth, "\n\t\t\t\t<h3>".concat(player.hp, "/").concat(player.attributes.maxHP, "</h3>\n\t\t\t\t<h3>Floor ").concat(battleField.floor, "</h3>\n\t\t\t"));
       dom.addChild(playerInfoWrapper, playerHealth);
       var playerStats = dom.createEl();
       dom.setClass(playerStats, 'playerRowPlayerStats');
@@ -318,6 +318,10 @@ function () {
         var monsterContainer = dom.createEl();
         dom.setId(monsterContainer, monster.id);
         dom.setClass(monsterContainer, 'monsterContainer');
+        var monsterHP = dom.createEl();
+        dom.setClass(monsterHP, 'monsterHP');
+        dom.addChild(monsterContainer, monsterHP);
+        dom.setText(monsterHP, "".concat(monster.hp, "/").concat(monster.attributes.maxHP));
         var sprite = dom.createEl();
         dom.setClass(sprite, 'portraitMonster');
         dom.setBackground(sprite, monster.type);
@@ -366,35 +370,33 @@ function () {
 
   }, {
     key: "levelUp",
-    value: function levelUp(newLevels, floor) {
+    value: function levelUp(newLevels) {
       newLevels--;
-      console.log('levelUp', newLevels);
       var floorEnd = dom.findByClass('.floorEnd');
       var buttons = ['Strength', 'Dexterity', 'Speed', 'Fortitude', 'Luck'];
       buttons.forEach(function (button) {
         var select = dom.createButton(button);
         dom.addListener(select, 'click', function () {
-          return Helper.increaseSkill(button, newLevels, floor);
+          return Helper.increaseSkill(button, newLevels);
         });
         dom.addChild(floorEnd, select);
       });
     }
   }, {
     key: "endFloor",
-    value: function endFloor(floor, newLevels) {
+    value: function endFloor(newLevels) {
       this.clearFloor();
       var backdrop = dom.findByClass('.backdrop');
       var actions = dom.findByClass('.actions');
       var end = dom.createEl();
       dom.setClass(end, 'floorEnd');
-      console.log('render, new levels: ', newLevels);
 
       if (newLevels > 0) {
         dom.setHTML(end, "\n\t\t\t\t<h2>You leveled up ".concat(newLevels, " times!</h2>\n\t\t\t\t<h3>Add one point to your skills per level (your special skill will go up by two!)</h3>\n\t\t\t"));
         dom.addChild(backdrop, end);
-        this.levelUp(newLevels, floor);
+        this.levelUp(newLevels);
       } else {
-        dom.setHTML(end, "\n\t\t\t\t<h2>Floor clear!</h2>\n\t\t\t\t<h3>Prepare for floor ".concat(floor, "!</h3>\n\t\t\t"));
+        dom.setHTML(end, "\n\t\t\t\t<h2>Floor clear!</h2>\n\t\t\t\t<h3>Prepare for floor ".concat(battleField.floor, "!</h3>\n\t\t\t"));
         dom.addChild(backdrop, end);
         var cont = dom.createButton('Continue');
         dom.setClass(cont, 'actionButton');
@@ -404,7 +406,7 @@ function () {
     }
   }, {
     key: "gameOver",
-    value: function gameOver(player, floor) {
+    value: function gameOver(player) {
       this.clearFloor();
       var backdrop = dom.findByClass('.backdrop');
       var actions = dom.findByClass('.actions');

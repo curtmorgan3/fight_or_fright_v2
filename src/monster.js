@@ -72,7 +72,10 @@ export default class Monster{
 		let diff = this.level - playerLevel;
 		attributes.ac = this.getModifier(attributes.speed) + 10 + diff;
 		attributes.initiative = this.getModifier(attributes.speed) + 5 + diff;
-		attributes.maxHP = attributes.maxHP + 10 + this.getModifier(attributes.fort) + diff;
+		attributes.maxHP = attributes.maxHP + 5 + this.getModifier(attributes.fort) + diff;
+		if(attributes.maxHP < 2){
+			attributes.maxHP = 2;
+		}
 
 		return attributes;
 	}
@@ -82,11 +85,10 @@ export default class Monster{
 	}
 
 	async attack(){
-		console.log(`Monster ${this.id} attacks`);
 		let monsterContainer = dom.findById(this.id);
 		let sprite = monsterContainer.querySelector('.portraitMonster');
 		let banner = monsterContainer.querySelector('.monsterBanner');
-		dom.setText(banner, 'Attacking!');
+		dom.setText(banner, `${this.type} attacks!`);
 
 		let hit = Helper.determineHit(this, player);
 		if(hit){

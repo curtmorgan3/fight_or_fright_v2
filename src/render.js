@@ -1,5 +1,5 @@
 import Helper from './helper.js';
-import {dom, chooseCharacter, chooseName, startFloor, endFloor, gameOver, playAgain} from './app.js';
+import {dom, chooseCharacter, battleField, chooseName, startFloor, endFloor, gameOver, playAgain} from './app.js';
 
 export default class Render{
 
@@ -186,7 +186,7 @@ export default class Render{
 
 	// Prepare for horror!
 
-	prepare(player, level){
+	prepare(player){
 		let welcome = dom.findByClass('.welcome');
 		dom.clear(welcome);
 
@@ -208,7 +208,7 @@ export default class Render{
 				<h3>Strength: ${player.attributes.str} / Speed: ${player.attributes.speed} / Dexterity: ${player.attributes.dex}</h3>
 				<h3>Fortitude: ${player.attributes.fort} / Luck: ${player.attributes.luck} / Max HP: ${player.attributes.maxHP}</h3>
 				<h3>Weapon: ${player.weaponType} / Quality: ${player.weapon}
-				<h2>Floor ${level}</h2>
+				<h2>Floor ${battleField.floor}</h2>
 			`
 		)
 
@@ -231,6 +231,7 @@ export default class Render{
 		dom.setClass(playerHealth, 'playerRowPlayerHealth');
 		dom.setHTML(playerHealth, `
 				<h3>${player.hp}/${player.attributes.maxHP}</h3>
+				<h3>Floor ${battleField.floor}</h3>
 			`);
 		dom.addChild(playerInfoWrapper, playerHealth);
 
@@ -332,6 +333,11 @@ export default class Render{
 			dom.setId(monsterContainer, monster.id);
 			dom.setClass(monsterContainer, 'monsterContainer');
 
+			let monsterHP = dom.createEl();
+			dom.setClass(monsterHP, 'monsterHP');
+			dom.addChild(monsterContainer, monsterHP);
+			dom.setText(monsterHP, `${monster.hp}/${monster.attributes.maxHP}`)
+
 			let sprite = dom.createEl();
 			dom.setClass(sprite, 'portraitMonster');
 			dom.setBackground(sprite, monster.type);
@@ -362,37 +368,35 @@ export default class Render{
 
 	// End Floor
 
-	levelUp(newLevels, floor){
+	levelUp(newLevels){
 		newLevels --;
-		console.log('levelUp', newLevels);
 		let floorEnd = dom.findByClass('.floorEnd');
 		let buttons = ['Strength', 'Dexterity', 'Speed', 'Fortitude', 'Luck'];
 		buttons.forEach(button => {
 			let select = dom.createButton(button);
-			dom.addListener(select, 'click', ()=> Helper.increaseSkill(button, newLevels, floor));
+			dom.addListener(select, 'click', ()=> Helper.increaseSkill(button, newLevels));
 			dom.addChild(floorEnd, select);
 		})
 	}
 
-	endFloor(floor, newLevels){
+	endFloor(newLevels){
 		this.clearFloor();
 		let backdrop = dom.findByClass('.backdrop');
 		let actions = dom.findByClass('.actions');
 
 		let end = dom.createEl();
 		dom.setClass(end, 'floorEnd');
-		console.log('render, new levels: ', newLevels);
 		if(newLevels > 0){
 			dom.setHTML(end, `
 				<h2>You leveled up ${newLevels} times!</h2>
 				<h3>Add one point to your skills per level (your special skill will go up by two!)</h3>
 			`);
 			dom.addChild(backdrop, end);
-			this.levelUp(newLevels, floor);
+			this.levelUp(newLevels);
 		}else{
 			dom.setHTML(end, `
 				<h2>Floor clear!</h2>
-				<h3>Prepare for floor ${floor}!</h3>
+				<h3>Prepare for floor ${battleField.floor}!</h3>
 			`);
 			dom.addChild(backdrop, end);
 
@@ -404,7 +408,7 @@ export default class Render{
 
 	}
 
-	gameOver(player, floor){
+	gameOver(player){
 		this.clearFloor();
 		let backdrop = dom.findByClass('.backdrop');
 		let actions = dom.findByClass('.actions');

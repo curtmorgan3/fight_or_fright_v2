@@ -34,7 +34,7 @@ export default class Character{
 	}
 
 	getModifier(n){
-		let mod = -5;
+		let mod = 0;
   	for (let i = 1; i<n; i+= 2){
     	mod += 1;
 	  }
@@ -102,6 +102,7 @@ export default class Character{
 	async attackMonster(id){
 		let defenderContainer = dom.findById(id);
 		let defenderBanner = defenderContainer.querySelector('.monsterBanner');
+		let defenderHP = defenderContainer.querySelector('.monsterHP');
 		let floor = dom.findByClass('.floor');
 		let overlay = dom.createEl();
 		dom.setClass(overlay, 'overlay');
@@ -119,6 +120,7 @@ export default class Character{
 				let damage = Helper.determineDamage(player, defender);
 				dom.setText(defenderBanner, `Hit! ${damage} damage.`);
 				defender.hp -= damage;
+				dom.setText(defenderHP, `${defender.hp}/${defender.attributes.maxHP}`);
 				await Helper.sleep(2000);
 				dom.setText(defenderBanner, ``);
 				if(defender.hp < 1){

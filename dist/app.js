@@ -18,25 +18,30 @@ export function chooseCharacter(type) {
 }
 export function chooseName(name) {
   player.name = name;
-  render.prepare(player, floor);
+  render.prepare(player);
 }
 export function startFloor() {
-  var monsters = Helper.generateMonsters(floor, player);
+  battleField = new BattleField(turnOrder, monsters, floor);
+  monsters = Helper.generateMonsters(player);
   turnOrder = Helper.determineTurnOrder(player, monsters);
-  battleField = new BattleField(turnOrder, monsters);
+  battleField.monsters = monsters;
+  battleField.turnOrder = turnOrder;
   render.populateFloor(player, turnOrder, monsters);
   attackTurn();
 }
 export function endFloor() {
+  var overlay = dom.findByClass('.overlay');
+  dom.destroyEl(overlay);
   var newLevels = Helper.checkLevelUp(0);
-  floor++;
-  render.endFloor(floor, newLevels);
+  battleField.floor = battleField.floor + 1;
+  floor = battleField.floor;
+  render.endFloor(newLevels);
 }
 export function gameOver() {
-  render.gameOver(player, floor);
+  render.gameOver(player);
 }
 export function playAgain() {
-  floor = 1;
+  battleField.floor = 1;
   player = {};
   turnOrder = [];
   render.clearFloor();

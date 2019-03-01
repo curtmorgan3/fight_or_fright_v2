@@ -47,7 +47,7 @@ function () {
   }, {
     key: "getModifier",
     value: function getModifier(n) {
-      var mod = -5;
+      var mod = 0;
 
       for (var i = 1; i < n; i += 2) {
         mod += 1;
@@ -128,19 +128,20 @@ function () {
       var _attackMonster = _asyncToGenerator(
       /*#__PURE__*/
       _regeneratorRuntime.mark(function _callee(id) {
-        var defenderContainer, defenderBanner, floor, overlay, defenderPos, defender, hit, damage, xp;
+        var defenderContainer, defenderBanner, defenderHP, floor, overlay, defenderPos, defender, hit, damage, xp;
         return _regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
                 defenderContainer = dom.findById(id);
                 defenderBanner = defenderContainer.querySelector('.monsterBanner');
+                defenderHP = defenderContainer.querySelector('.monsterHP');
                 floor = dom.findByClass('.floor');
                 overlay = dom.createEl();
                 dom.setClass(overlay, 'overlay');
 
                 if (!player.attacking) {
-                  _context.next = 33;
+                  _context.next = 35;
                   break;
                 }
 
@@ -148,24 +149,25 @@ function () {
                 defenderPos = Helper.findPosition(id, battleField.turnOrder);
                 defender = battleField.turnOrder[defenderPos];
                 dom.setText(defenderBanner, "".concat(player.name, " attacks!"));
-                _context.next = 12;
+                _context.next = 13;
                 return Helper.sleep(2000);
 
-              case 12:
+              case 13:
                 hit = Helper.determineHit(player, defender);
 
                 if (!hit) {
-                  _context.next = 23;
+                  _context.next = 25;
                   break;
                 }
 
                 damage = Helper.determineDamage(player, defender);
                 dom.setText(defenderBanner, "Hit! ".concat(damage, " damage."));
                 defender.hp -= damage;
-                _context.next = 19;
+                dom.setText(defenderHP, "".concat(defender.hp, "/").concat(defender.attributes.maxHP));
+                _context.next = 21;
                 return Helper.sleep(2000);
 
-              case 19:
+              case 21:
                 dom.setText(defenderBanner, "");
 
                 if (defender.hp < 1) {
@@ -186,32 +188,32 @@ function () {
                   }
                 }
 
-                _context.next = 27;
+                _context.next = 29;
                 break;
 
-              case 23:
+              case 25:
                 dom.setText(defenderBanner, "Miss!");
-                _context.next = 26;
+                _context.next = 28;
                 return Helper.sleep(2000);
 
-              case 26:
+              case 28:
                 dom.setText(defenderBanner, "");
 
-              case 27:
+              case 29:
                 dom.setText(attackButton, 'Wait');
                 player.went = true;
                 player.attacking = false;
                 attackTurn();
-                _context.next = 34;
+                _context.next = 36;
                 break;
 
-              case 33:
+              case 35:
                 console.log('Not players turn');
 
-              case 34:
+              case 36:
                 dom.destroyEl(overlay);
 
-              case 35:
+              case 37:
               case "end":
                 return _context.stop();
             }

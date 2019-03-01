@@ -231,7 +231,7 @@
   text-align: center;
 }
 .monsterContainer{
-	max-height: 150px;
+	max-height: 200px;
   max-width: 100px;
 	height: 100%;
 	width: 100%;
@@ -240,7 +240,14 @@
 	align-items: flex-start;
 	justify-content: flex-start;
 }
-
+.monsterHP{
+	height: 50%;
+	width: 100%;
+	color: #CC0B00;
+	text-align: center;
+	font-size: 40px;
+	font-weight: bold;
+}
 .monsterBanner{
 	height: 50%;
 	width: 100%;
@@ -249,8 +256,8 @@
 }
 .portraitMonster{
 	margin: 0;
-  max-height: 100px;
-  max-width: 100px;
+  max-height: 125px;
+  max-width: 125px;
 	height: 90%;
 	width: 100%;
   background-size: contain;
@@ -394,6 +401,10 @@
 	.portraitOrder{
 	  min-height: 200px;
 	  min-width: 200px;
+	}
+
+	.monsterHP{
+		font-size: 70px;
 	}
 
 	/* Floor End **************/
