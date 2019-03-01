@@ -1,4 +1,5 @@
 import Monster from './monster.js';
+import {player, render} from './app.js';
 
 export default class Helper{
 
@@ -81,5 +82,71 @@ export default class Helper{
 		};
 		return damage;
 	};
+
+	static xp(player, monster){
+		let xp = (monster.level * this.randNumber(300)) + (this.randNumber(100) * player.getModifier(player.attributes.luck));
+		if(xp < 1){
+			xp = 1;
+		}
+		return xp;
+	};
+
+	static checkLevelUp(n){
+		let xp = player.xp;
+  	let currentLevel = player.level;
+  	let nextLevel = currentLevel + 1;
+
+  	let requiredXP = ( ( ( (nextLevel * nextLevel) + nextLevel) / 2) * 100) - (nextLevel * 100);
+
+  	if (xp >= requiredXP){
+    	let canLevel = n;
+			canLevel ++;
+    	player.level ++;
+    	return this.checkLevelUp(canLevel);
+  	}else{
+			return n;
+		}
+	}
+
+	static increaseSkill(skill, newLevels, floor){
+		switch(skill){
+			case 'Strength':
+				if(player.type === 'knight'){
+					player.attributes.str += 2;
+				}else{
+					player.attributes.str ++;
+				}
+			break;
+			case 'Dexterity':
+			if(player.type === 'ninja'){
+				player.attributes.dex += 2;
+			}else{
+				player.attributes.dex ++;
+			}
+			break;
+			case 'Speed':
+			if(player.type === 'rogue'){
+				player.attributes.speed += 2;
+			}else{
+				player.attributes.speed ++;
+			}
+			break;
+			case 'Fortitude':
+			if(player.type === 'priest'){
+				player.attributes.fort += 2;
+			}else{
+				player.attributes.fort ++;
+			}
+			break;
+			case 'Luck':
+			if(player.type === 'gambler'){
+				player.attributes.luck += 2;
+			}else{
+				player.attributes.luck ++;
+			}
+			break;
+		}
+		render.endFloor(floor, newLevels);
+	}
 
 }

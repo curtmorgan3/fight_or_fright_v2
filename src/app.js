@@ -31,8 +31,9 @@ export function startFloor(){
 }
 
 export function endFloor(){
+	let newLevels = Helper.checkLevelUp(0);
 	floor++;
-	render.endFloor(player, floor);
+	render.endFloor(floor, newLevels);
 }
 
 export function gameOver(){
@@ -52,16 +53,6 @@ export function playAgain(){
 function startGame(){
 	render.playArea();
 	render.welcome();
-}
-
-export function resetMonsterSprites(){
-	console.log('sprite reset');
-	turnOrder.forEach(character => {
-		if(character.id !== 'player'){
-			let sprite = dom.findById(character.id);
-			dom.setClass(sprite, 'portraitMonster');
-		}
-	});
 }
 
 export async function attackTurn(n){
@@ -86,7 +77,6 @@ export async function attackTurn(n){
 			await battleField.turnOrder[i].attack(battleField.turnOrder[i].id, player);
 			if(i === battleField.turnOrder.length - 1){
 				console.log('start again');
-				resetMonsterSprites();
 				attackTurn();
 			}
 		}

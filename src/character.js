@@ -1,12 +1,12 @@
 import Helper from './helper.js';
-import {render, dom, player, attackTurn, resetMonsterSprites, battleField, endFloor} from './app.js';
+import {render, dom, player, attackTurn, battleField, endFloor} from './app.js';
 
 export default class Character{
 	constructor(type){
 		this.type = type;
 		this.id = 'player';
 		this.level = 1;
-		this.xp = 0;
+		this.xp = 300;
 		this.attributes = this.attributes(type);
 		this.inventory = ['potion', 'potion'];
 		this.weaponType = 'Wooden Sword';
@@ -103,11 +103,21 @@ export default class Character{
 		if(player.attacking){
 			let defenderPos = Helper.findPosition(id, battleField.turnOrder);
 			let defender = battleField.turnOrder[defenderPos];
+			let defenderContainer = dom.findById(id);
+			let defenderBanner = defenderContainer.querySelector('.monsterBanner');
+			dom.setText(defenderBanner, `${player.name} attacks!`);
+			await Helper.sleep(2000);
+
 			let hit = Helper.determineHit(player, defender);
 			if(hit){
 				let damage = Helper.determineDamage(player, defender);
+				dom.setText(defenderBanner, `Hit! ${damage} damage.`);
 				defender.hp -= damage;
+				await Helper.sleep(2000);
+				dom.setText(defenderBanner, ``);
 				if(defender.hp < 1){
+					let xp = Helper.xp(player, defender.level);
+					player.xp += xp;
 					battleField.turnOrder = battleField.turnOrder.filter(monster => monster.id !== id);
 					if(battleField.turnOrder.length === 1){
 						endFloor();
@@ -117,11 +127,14 @@ export default class Character{
 						render.populateBackdrop(battleField.monsters, player);
 					}
 				}
+			}else{
+				dom.setText(defenderBanner, `Miss!`);
+				await Helper.sleep(2000);
+				dom.setText(defenderBanner, ``);
 			}
 			dom.setText(attackButton, 'Wait');
 			player.went = true;
 			player.attacking = false;
-			resetMonsterSprites();
 			attackTurn();
 		}else {
 			console.log('Not players turn');

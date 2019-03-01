@@ -115,30 +115,54 @@ function () {
       var _attack = _asyncToGenerator(
       /*#__PURE__*/
       _regeneratorRuntime.mark(function _callee() {
-        var sprite, hit, damage;
+        var monsterContainer, sprite, banner, hit, damage;
         return _regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
                 console.log("Monster ".concat(this.id, " attacks"));
-                sprite = dom.findById(this.id);
-                dom.setClass(sprite, 'attackingSprite');
+                monsterContainer = dom.findById(this.id);
+                sprite = monsterContainer.querySelector('.portraitMonster');
+                banner = monsterContainer.querySelector('.monsterBanner');
+                dom.setText(banner, 'Attacking!');
                 hit = Helper.determineHit(this, player);
 
-                if (hit) {
-                  damage = Helper.determineDamage(this, player);
-                  player.hp -= damage;
-                  render.populatePlayerRow(player);
-
-                  if (player.hp < 1) {
-                    gameOver();
-                  }
+                if (!hit) {
+                  _context.next = 16;
+                  break;
                 }
 
-                _context.next = 7;
+                damage = Helper.determineDamage(this, player);
+                player.hp -= damage;
+                _context.next = 11;
                 return Helper.sleep(2000);
 
-              case 7:
+              case 11:
+                render.populatePlayerRow(player);
+                dom.setText(banner, "Hit! ".concat(damage, " damage."));
+
+                if (player.hp < 1) {
+                  gameOver();
+                }
+
+                _context.next = 19;
+                break;
+
+              case 16:
+                _context.next = 18;
+                return Helper.sleep(2000);
+
+              case 18:
+                dom.setText(banner, 'Miss!');
+
+              case 19:
+                _context.next = 21;
+                return Helper.sleep(1000);
+
+              case 21:
+                dom.setText(banner, '');
+
+              case 22:
               case "end":
                 return _context.stop();
             }

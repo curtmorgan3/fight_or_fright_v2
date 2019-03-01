@@ -3,7 +3,7 @@ import _asyncToGenerator from "@babel/runtime/helpers/asyncToGenerator";
 import _classCallCheck from "@babel/runtime/helpers/classCallCheck";
 import _createClass from "@babel/runtime/helpers/createClass";
 import Helper from './helper.js';
-import { render, dom, player, attackTurn, resetMonsterSprites, battleField, endFloor } from './app.js';
+import { render, dom, player, attackTurn, battleField, endFloor } from './app.js';
 
 var Character =
 /*#__PURE__*/
@@ -14,7 +14,7 @@ function () {
     this.type = type;
     this.id = 'player';
     this.level = 1;
-    this.xp = 0;
+    this.xp = 300;
     this.attributes = this.attributes(type);
     this.inventory = ['potion', 'potion'];
     this.weaponType = 'Wooden Sword';
@@ -128,47 +128,82 @@ function () {
       var _attackMonster = _asyncToGenerator(
       /*#__PURE__*/
       _regeneratorRuntime.mark(function _callee(id) {
-        var defenderPos, defender, hit, damage;
+        var defenderPos, defender, defenderContainer, defenderBanner, hit, damage, xp;
         return _regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                if (player.attacking) {
-                  defenderPos = Helper.findPosition(id, battleField.turnOrder);
-                  defender = battleField.turnOrder[defenderPos];
-                  hit = Helper.determineHit(player, defender);
-
-                  if (hit) {
-                    damage = Helper.determineDamage(player, defender);
-                    defender.hp -= damage;
-
-                    if (defender.hp < 1) {
-                      battleField.turnOrder = battleField.turnOrder.filter(function (monster) {
-                        return monster.id !== id;
-                      });
-
-                      if (battleField.turnOrder.length === 1) {
-                        endFloor();
-                      } else {
-                        render.populateTurnOrder(battleField.turnOrder);
-                        battleField.monsters = battleField.monsters.filter(function (monster) {
-                          return monster.id !== id;
-                        });
-                        render.populateBackdrop(battleField.monsters, player);
-                      }
-                    }
-                  }
-
-                  dom.setText(attackButton, 'Wait');
-                  player.went = true;
-                  player.attacking = false;
-                  resetMonsterSprites();
-                  attackTurn();
-                } else {
-                  console.log('Not players turn');
+                if (!player.attacking) {
+                  _context.next = 29;
+                  break;
                 }
 
-              case 1:
+                defenderPos = Helper.findPosition(id, battleField.turnOrder);
+                defender = battleField.turnOrder[defenderPos];
+                defenderContainer = dom.findById(id);
+                defenderBanner = defenderContainer.querySelector('.monsterBanner');
+                dom.setText(defenderBanner, "".concat(player.name, " attacks!"));
+                _context.next = 8;
+                return Helper.sleep(2000);
+
+              case 8:
+                hit = Helper.determineHit(player, defender);
+
+                if (!hit) {
+                  _context.next = 19;
+                  break;
+                }
+
+                damage = Helper.determineDamage(player, defender);
+                dom.setText(defenderBanner, "Hit! ".concat(damage, " damage."));
+                defender.hp -= damage;
+                _context.next = 15;
+                return Helper.sleep(2000);
+
+              case 15:
+                dom.setText(defenderBanner, "");
+
+                if (defender.hp < 1) {
+                  xp = Helper.xp(player, defender.level);
+                  player.xp += xp;
+                  battleField.turnOrder = battleField.turnOrder.filter(function (monster) {
+                    return monster.id !== id;
+                  });
+
+                  if (battleField.turnOrder.length === 1) {
+                    endFloor();
+                  } else {
+                    render.populateTurnOrder(battleField.turnOrder);
+                    battleField.monsters = battleField.monsters.filter(function (monster) {
+                      return monster.id !== id;
+                    });
+                    render.populateBackdrop(battleField.monsters, player);
+                  }
+                }
+
+                _context.next = 23;
+                break;
+
+              case 19:
+                dom.setText(defenderBanner, "Miss!");
+                _context.next = 22;
+                return Helper.sleep(2000);
+
+              case 22:
+                dom.setText(defenderBanner, "");
+
+              case 23:
+                dom.setText(attackButton, 'Wait');
+                player.went = true;
+                player.attacking = false;
+                attackTurn();
+                _context.next = 30;
+                break;
+
+              case 29:
+                console.log('Not players turn');
+
+              case 30:
               case "end":
                 return _context.stop();
             }

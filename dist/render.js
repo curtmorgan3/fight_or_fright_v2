@@ -315,11 +315,13 @@ function () {
       var backdrop = dom.findByClass('.backdrop');
       dom.clear(backdrop);
       monsters.forEach(function (monster) {
+        var monsterContainer = dom.createEl();
+        dom.setId(monsterContainer, monster.id);
+        dom.setClass(monsterContainer, 'monsterContainer');
         var sprite = dom.createEl();
         dom.setClass(sprite, 'portraitMonster');
-        dom.setId(sprite, monster.id);
         dom.setBackground(sprite, monster.type);
-        dom.addChild(backdrop, sprite);
+        dom.addChild(monsterContainer, sprite);
         dom.addListener(sprite, 'click',
         /*#__PURE__*/
         _asyncToGenerator(
@@ -342,6 +344,10 @@ function () {
             }
           }, _callee);
         })));
+        var monsterBanner = dom.createEl();
+        dom.setClass(monsterBanner, 'monsterBanner');
+        dom.addChild(monsterContainer, monsterBanner);
+        dom.addChild(backdrop, monsterContainer);
       });
     }
   }, {
@@ -359,19 +365,42 @@ function () {
     } // End Floor
 
   }, {
+    key: "levelUp",
+    value: function levelUp(newLevels, floor) {
+      newLevels--;
+      console.log('levelUp', newLevels);
+      var floorEnd = dom.findByClass('.floorEnd');
+      var buttons = ['Strength', 'Dexterity', 'Speed', 'Fortitude', 'Luck'];
+      buttons.forEach(function (button) {
+        var select = dom.createButton(button);
+        dom.addListener(select, 'click', function () {
+          return Helper.increaseSkill(button, newLevels, floor);
+        });
+        dom.addChild(floorEnd, select);
+      });
+    }
+  }, {
     key: "endFloor",
-    value: function endFloor(player, floor) {
+    value: function endFloor(floor, newLevels) {
       this.clearFloor();
       var backdrop = dom.findByClass('.backdrop');
       var actions = dom.findByClass('.actions');
       var end = dom.createEl();
       dom.setClass(end, 'floorEnd');
-      dom.setHTML(end, "\n\t\t\t<h2>Floor clear!</h2>\n\t\t\t<h3>Prepare for floor ".concat(floor, "!</h3>\n\t\t"));
-      dom.addChild(backdrop, end);
-      var cont = dom.createButton('Continue');
-      dom.setClass(cont, 'actionButton');
-      dom.addListener(cont, 'click', startFloor);
-      dom.addChild(actions, cont);
+      console.log('render, new levels: ', newLevels);
+
+      if (newLevels > 0) {
+        dom.setHTML(end, "\n\t\t\t\t<h2>You leveled up ".concat(newLevels, " times!</h2>\n\t\t\t\t<h3>Add one point to your skills per level (your special skill will go up by two!)</h3>\n\t\t\t"));
+        dom.addChild(backdrop, end);
+        this.levelUp(newLevels, floor);
+      } else {
+        dom.setHTML(end, "\n\t\t\t\t<h2>Floor clear!</h2>\n\t\t\t\t<h3>Prepare for floor ".concat(floor, "!</h3>\n\t\t\t"));
+        dom.addChild(backdrop, end);
+        var cont = dom.createButton('Continue');
+        dom.setClass(cont, 'actionButton');
+        dom.addListener(cont, 'click', startFloor);
+        dom.addChild(actions, cont);
+      }
     }
   }, {
     key: "gameOver",

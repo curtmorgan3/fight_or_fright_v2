@@ -83,20 +83,28 @@ export default class Monster{
 
 	async attack(){
 		console.log(`Monster ${this.id} attacks`);
-		let sprite = dom.findById(this.id);
-		dom.setClass(sprite, 'attackingSprite');
+		let monsterContainer = dom.findById(this.id);
+		let sprite = monsterContainer.querySelector('.portraitMonster');
+		let banner = monsterContainer.querySelector('.monsterBanner');
+		dom.setText(banner, 'Attacking!');
 
 		let hit = Helper.determineHit(this, player);
 		if(hit){
 			let damage = Helper.determineDamage(this, player);
 			player.hp -= damage;
+			await Helper.sleep(2000);
 			render.populatePlayerRow(player);
+			dom.setText(banner, `Hit! ${damage} damage.`);
 			if(player.hp < 1){
 				gameOver();
 			}
+		}else{
+			await Helper.sleep(2000);
+			dom.setText(banner, 'Miss!');
 		}
 
-		await Helper.sleep(2000);
+		await Helper.sleep(1000);
+		dom.setText(banner, '');
 	}
 
 

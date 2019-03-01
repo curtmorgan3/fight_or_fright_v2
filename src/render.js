@@ -328,12 +328,21 @@ export default class Render{
 		let backdrop = dom.findByClass('.backdrop');
 		dom.clear(backdrop);
 		monsters.forEach(monster => {
+			let monsterContainer = dom.createEl();
+			dom.setId(monsterContainer, monster.id);
+			dom.setClass(monsterContainer, 'monsterContainer');
+
 			let sprite = dom.createEl();
 			dom.setClass(sprite, 'portraitMonster');
-			dom.setId(sprite, monster.id);
 			dom.setBackground(sprite, monster.type);
-			dom.addChild(backdrop, sprite);
+			dom.addChild(monsterContainer, sprite);
 			dom.addListener(sprite, 'click', async ()=> await player.attackMonster(monster.id));
+
+			let monsterBanner = dom.createEl();
+			dom.setClass(monsterBanner, 'monsterBanner');
+			dom.addChild(monsterContainer, monsterBanner);
+
+			dom.addChild(backdrop, monsterContainer);
 		});
 	}
 
@@ -353,23 +362,45 @@ export default class Render{
 
 	// End Floor
 
-	endFloor(player, floor){
+	levelUp(newLevels, floor){
+		newLevels --;
+		console.log('levelUp', newLevels);
+		let floorEnd = dom.findByClass('.floorEnd');
+		let buttons = ['Strength', 'Dexterity', 'Speed', 'Fortitude', 'Luck'];
+		buttons.forEach(button => {
+			let select = dom.createButton(button);
+			dom.addListener(select, 'click', ()=> Helper.increaseSkill(button, newLevels, floor));
+			dom.addChild(floorEnd, select);
+		})
+	}
+
+	endFloor(floor, newLevels){
 		this.clearFloor();
 		let backdrop = dom.findByClass('.backdrop');
 		let actions = dom.findByClass('.actions');
 
 		let end = dom.createEl();
 		dom.setClass(end, 'floorEnd');
-		dom.setHTML(end, `
-			<h2>Floor clear!</h2>
-			<h3>Prepare for floor ${floor}!</h3>
-		`);
-		dom.addChild(backdrop, end);
+		console.log('render, new levels: ', newLevels);
+		if(newLevels > 0){
+			dom.setHTML(end, `
+				<h2>You leveled up ${newLevels} times!</h2>
+				<h3>Add one point to your skills per level (your special skill will go up by two!)</h3>
+			`);
+			dom.addChild(backdrop, end);
+			this.levelUp(newLevels, floor);
+		}else{
+			dom.setHTML(end, `
+				<h2>Floor clear!</h2>
+				<h3>Prepare for floor ${floor}!</h3>
+			`);
+			dom.addChild(backdrop, end);
 
-		let cont = dom.createButton('Continue');
-		dom.setClass(cont, 'actionButton');
-		dom.addListener(cont, 'click', startFloor);
-		dom.addChild(actions, cont);
+			let cont = dom.createButton('Continue');
+			dom.setClass(cont, 'actionButton');
+			dom.addListener(cont, 'click', startFloor);
+			dom.addChild(actions, cont);
+		}
 
 	}
 

@@ -3,6 +3,7 @@ import _asyncToGenerator from "@babel/runtime/helpers/asyncToGenerator";
 import _classCallCheck from "@babel/runtime/helpers/classCallCheck";
 import _createClass from "@babel/runtime/helpers/createClass";
 import Monster from './monster.js';
+import { player, render } from './app.js';
 
 var Helper =
 /*#__PURE__*/
@@ -131,6 +132,86 @@ function () {
 
       ;
       return damage;
+    }
+  }, {
+    key: "xp",
+    value: function xp(player, monster) {
+      var xp = monster.level * this.randNumber(300) + this.randNumber(100) * player.getModifier(player.attributes.luck);
+
+      if (xp < 1) {
+        xp = 1;
+      }
+
+      return xp;
+    }
+  }, {
+    key: "checkLevelUp",
+    value: function checkLevelUp(n) {
+      var xp = player.xp;
+      var currentLevel = player.level;
+      var nextLevel = currentLevel + 1;
+      var requiredXP = (nextLevel * nextLevel + nextLevel) / 2 * 100 - nextLevel * 100;
+
+      if (xp >= requiredXP) {
+        var canLevel = n;
+        canLevel++;
+        player.level++;
+        return this.checkLevelUp(canLevel);
+      } else {
+        return n;
+      }
+    }
+  }, {
+    key: "increaseSkill",
+    value: function increaseSkill(skill, newLevels, floor) {
+      switch (skill) {
+        case 'Strength':
+          if (player.type === 'knight') {
+            player.attributes.str += 2;
+          } else {
+            player.attributes.str++;
+          }
+
+          break;
+
+        case 'Dexterity':
+          if (player.type === 'ninja') {
+            player.attributes.dex += 2;
+          } else {
+            player.attributes.dex++;
+          }
+
+          break;
+
+        case 'Speed':
+          if (player.type === 'rogue') {
+            player.attributes.speed += 2;
+          } else {
+            player.attributes.speed++;
+          }
+
+          break;
+
+        case 'Fortitude':
+          if (player.type === 'priest') {
+            player.attributes.fort += 2;
+          } else {
+            player.attributes.fort++;
+          }
+
+          break;
+
+        case 'Luck':
+          if (player.type === 'gambler') {
+            player.attributes.luck += 2;
+          } else {
+            player.attributes.luck++;
+          }
+
+          break;
+      }
+
+      render.endFloor(floor, newLevels);
     }
   }]);
 
