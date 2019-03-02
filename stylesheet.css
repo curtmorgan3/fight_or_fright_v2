@@ -231,8 +231,8 @@
   text-align: center;
 }
 .monsterContainer{
-	max-height: 200px;
-  max-width: 100px;
+	max-height: 250px;
+  max-width: 150px;
 	height: 100%;
 	width: 100%;
 	display: flex;
@@ -306,6 +306,7 @@
 	.portrait{
 		height: 175px;
 		width: 175px;
+		margin-bottom: 20px;
 	}
 	.portrait:hover{
 		height: 200px;
@@ -402,8 +403,16 @@
 	  min-height: 200px;
 	  min-width: 200px;
 	}
+	.monsterContainer{
+		margin: 50px;
+		max-height: 500px;
+	  max-width: 150px;
 
+	}
 	.monsterHP{
+		font-size: 70px;
+	}
+	.monsterBanner{
 		font-size: 70px;
 	}
 

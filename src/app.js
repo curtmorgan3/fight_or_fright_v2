@@ -12,11 +12,6 @@ let monsters = [];
 let turnOrder = [];
 let battleField = {};
 
-// TODO: Chance for item drop between levels
-// TODO: Replace weapons
-// TODO: Resize Monster Sprites
-// TODO: Escape
-
 export function chooseCharacter(type){
 	player = new Character(type);
 	render.name(player.type);
@@ -33,8 +28,6 @@ export function startFloor(){
 	turnOrder = Helper.determineTurnOrder(player, monsters);
 	battleField.monsters = monsters;
 	battleField.turnOrder = turnOrder;
-	console.log('player', player);
-	console.log('monster', monsters);
 	render.populateFloor(player, turnOrder, monsters);
 	attackTurn();
 }
@@ -42,17 +35,44 @@ export function startFloor(){
 export function endFloor(){
 	let overlay = dom.findByClass('.overlay');
 	dom.destroyEl(overlay);
-	let newLevels = Helper.checkLevelUp(0);
-	battleField.floor = battleField.floor + 1;
-	floor = battleField.floor;
-	render.endFloor(newLevels);
+	if(!battleField.checkedForWeapon){
+		battleField.checkedForWeapon = true;
+		let foundNewWeapon = Helper.chanceFoundWeapon();
+		if(!foundNewWeapon){
+			console.log('didnt find weapon');
+			let foundPotion = Helper.chanceFoundPotion();
+		// Found a potion
+			console.log('inven', player.inventory);
+			if(foundPotion && player.inventory.length < 2){
+				console.log('found potion');
+				battleField.foundPotion = true;
+				render.foundPotion();
+			}else{
+				console.log('found nothing');
+				let newLevels = Helper.checkLevelUp(0);
+				battleField.floor = battleField.floor + 1;
+				floor = battleField.floor;
+				render.endFloor(newLevels);
+			}
+		// Found a weapon
+		}else{
+			let newWeapon = Helper.newWeapon();
+			battleField.foundWeapon = true;
+			render.foundWeapon(newWeapon);
+		}
+	}else{
+		let newLevels = Helper.checkLevelUp(0);
+		battleField.floor = battleField.floor + 1;
+		floor = battleField.floor;
+		render.endFloor(newLevels);
+	}
 }
 
 export function resetFloor(){
 	let overlay = dom.findByClass('.overlay');
 	dom.destroyEl(overlay);
-	if(player.hp < (player.maxHP / 2)){
-		player.hp = (player.maxHP / 2);
+	if(player.hp < (player.attributes.maxHP / 2)){
+		player.hp = (player.attributes.maxHP / 2);
 	};
 	render.resetFloor();
 }
@@ -105,6 +125,18 @@ export async function attackTurn(n){
 		}
 	}
 
+}
+
+export function takeWeapon(weapon, qual, type){
+	player.weapon = weapon;
+	player.weaponQual = qual;
+	player.weaponType = type;
+	endFloor();
+};
+
+export function takePotion(){
+	player.inventory.push('potion');
+	endFloor();
 }
 
 startGame();

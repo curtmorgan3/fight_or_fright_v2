@@ -133,7 +133,6 @@ function () {
         damage++;
       }
 
-      console.log('damage', damage);
       return damage;
     }
   }, {
@@ -242,6 +241,47 @@ function () {
           return false;
         }
       }
+    }
+  }, {
+    key: "chanceFoundWeapon",
+    value: function chanceFoundWeapon() {
+      // let chance = this.randNumber(100) + player.getModifier(player.attributes.luck);
+      // console.log('chance found weapon ', chance);
+      // if(chance > 50){
+      // 	return true;
+      // }else{
+      // 	return false;
+      // }
+      return false;
+    }
+  }, {
+    key: "newWeapon",
+    value: function newWeapon() {
+      var chance = this.randNumber(100) + player.getModifier(player.attributes.luck);
+
+      if (chance > 95) {
+        return 20;
+      } else if (chance > 85 && chance < 95) {
+        return 16;
+      } else if (chance > 70 && chance < 85) {
+        return 12;
+      } else if (chance > 50 && chance < 70) {
+        return 8;
+      } else if (chance < 50) {
+        return 6;
+      }
+    }
+  }, {
+    key: "chanceFoundPotion",
+    value: function chanceFoundPotion() {
+      // let chance = this.randNumber(100) + player.getModifier(player.attributes.luck);
+      // console.log('chance found potion ', chance);
+      // if(chance > 50){
+      // 	return true;
+      // }else{
+      // 	return false;
+      // }
+      return true;
     }
   }]);
 

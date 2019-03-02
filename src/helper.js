@@ -80,7 +80,6 @@ export default class Helper{
 		if(coin > 1){
 			damage ++;
 		}
-		console.log('damage', damage);
 		return damage;
 	};
 
@@ -172,6 +171,43 @@ export default class Helper{
 				return false;
 			}
 		}
+	};
+
+	static chanceFoundWeapon(){
+		let chance = this.randNumber(100) + player.getModifier(player.attributes.luck);
+		console.log('chance found weapon ', chance);
+		if(chance > 50){
+			return true;
+		}else{
+			return false;
+		}
+	};
+
+	static newWeapon(){
+		let chance = this.randNumber(100) + player.getModifier(player.attributes.luck);
+		if(chance > 95){
+			return 20;
+		}else if (chance > 85 && chance < 95){
+			return 16;
+		}else if (chance > 70 && chance < 85){
+			return 12;
+		}else if (chance > 50 && chance < 70){
+			return 8;
+		}else if (chance < 50){
+			return 6;
+		}
 	}
+
+	static chanceFoundPotion(){
+		let chance = this.randNumber(100) + player.getModifier(player.attributes.luck);
+		console.log('chance found potion ', chance);
+		if(chance > 50){
+			return true;
+		}else{
+			return false;
+		}
+	};
+
+
 
 }

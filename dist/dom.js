@@ -26,7 +26,9 @@ function () {
   }, {
     key: "destroyEl",
     value: function destroyEl(el) {
-      return el.parentNode.removeChild(el);
+      if (el !== null) {
+        return el.parentNode.removeChild(el);
+      }
     }
   }, {
     key: "setClass",
@@ -41,6 +43,7 @@ function () {
   }, {
     key: "setBackground",
     value: function setBackground(parent, image) {
+      image = image.toLowerCase();
       parent.style.backgroundImage = "url(images/".concat(image, ".png)");
     }
   }, {

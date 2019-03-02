@@ -1,5 +1,5 @@
 import Helper from './helper.js';
-import {dom, chooseCharacter, battleField, chooseName, startFloor, endFloor, gameOver, playAgain} from './app.js';
+import {dom, player, chooseCharacter, battleField, chooseName, startFloor, endFloor, gameOver, playAgain, takeWeapon, takePotion} from './app.js';
 
 export default class Render{
 
@@ -313,16 +313,7 @@ export default class Render{
 		dom.setId(escapeButton, 'escapeButton');
 		dom.addListener(escapeButton, 'click', player.escape);
 		dom.addChild(actions, escapeButton);
-		// Temporary Buttons
-		let endButton = dom.createButton('End Floor');
-		dom.setClass(endButton, 'actionButton');
-		dom.addListener(endButton, 'click', endFloor);
-		dom.addChild(actions, endButton);
 
-		let endGame = dom.createButton('End Game');
-		dom.setClass(endGame, 'actionButton');
-		dom.addListener(endGame, 'click', gameOver);
-		dom.addChild(actions, endGame);
 	}
 
 	populateBackdrop(monsters, player){
@@ -452,6 +443,84 @@ export default class Render{
 		dom.setClass(again, 'actionButton');
 		dom.addListener(again, 'click', playAgain);
 		dom.addChild(actions, again);
+	};
+
+	foundPotion(){
+		console.log('render found potion');
+		this.clearFloor();
+		let backdrop = dom.findByClass('.backdrop');
+		let end = dom.createEl();
+		dom.setClass(end, 'floorEnd');
+		dom.addChild(backdrop, end);
+
+		let found = dom.createEl();
+		dom.setHTML(found, `
+			<h2>You found a potion!</h3>
+		`);
+		dom.addChild(end, found);
+
+		let portrait = dom.createEl();
+		dom.setClass(portrait, 'portrait');
+		dom.setBackground(portrait, 'healthPotion');
+		dom.addChild(end, portrait);
+
+		let accept = dom.createButton('Take it!');
+		dom.addListener(accept, 'click', takePotion);
+		dom.addChild(end, accept);
+	};
+
+	foundWeapon(newWeapon){
+		this.clearFloor();
+		let backdrop = dom.findByClass('.backdrop');
+		let end = dom.createEl();
+		dom.setClass(end, 'floorEnd');
+		dom.addChild(backdrop, end);
+
+		let weaponQual = '';
+		let weapon = newWeapon;
+		let weaponName = '';
+		switch(weapon){
+			case 6:
+				weaponQual = 'Poor';
+				weaponName = 'Wooden Sword';
+			break;
+			case 8:
+				weaponQual = 'Decent';
+				weaponName = 'Small Dagger';
+			break;
+			case 10:
+				weaponQual = 'Good';
+				weaponName = 'Iron Sword';
+			break;
+			case 12:
+				weaponQual = 'Great';
+				weaponName = 'Axe';
+			break;
+			case 20:
+				weaponQual = 'Awesome';
+				weaponName = 'Double Axe';
+			break;
+		}
+
+		let found = dom.createEl();
+		dom.setHTML(found, `
+			<h2>You found a ${weaponName}!</h3>
+			<h3>It's ${weaponQual} quality.</h3>
+		`);
+		dom.addChild(end, found);
+
+		let portrait = dom.createEl();
+		dom.setClass(portrait, 'portrait');
+		dom.setBackground(portrait, weaponQual);
+		dom.addChild(end, portrait);
+
+		let accept = dom.createButton('Take it!');
+		dom.addListener(accept, 'click', ()=> takeWeapon(weapon, weaponQual, weaponName));
+		let deny = dom.createButton('Leave it');
+		dom.addListener(deny, 'click', ()=> takeWeapon(player.weapon, player.weaponQual, player.weaponType));
+		dom.addChild(end, accept);
+		dom.addChild(end, deny);
+
 	}
 
 }

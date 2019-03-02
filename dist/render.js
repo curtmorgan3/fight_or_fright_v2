@@ -3,7 +3,7 @@ import _asyncToGenerator from "@babel/runtime/helpers/asyncToGenerator";
 import _classCallCheck from "@babel/runtime/helpers/classCallCheck";
 import _createClass from "@babel/runtime/helpers/createClass";
 import Helper from './helper.js';
-import { dom, chooseCharacter, battleField, chooseName, startFloor, endFloor, gameOver, playAgain } from './app.js';
+import { dom, player, chooseCharacter, battleField, chooseName, startFloor, endFloor, gameOver, playAgain, takeWeapon, takePotion } from './app.js';
 
 var Render =
 /*#__PURE__*/
@@ -298,16 +298,7 @@ function () {
       dom.setClass(escapeButton, 'actionButton');
       dom.setId(escapeButton, 'escapeButton');
       dom.addListener(escapeButton, 'click', player.escape);
-      dom.addChild(actions, escapeButton); // Temporary Buttons
-
-      var endButton = dom.createButton('End Floor');
-      dom.setClass(endButton, 'actionButton');
-      dom.addListener(endButton, 'click', endFloor);
-      dom.addChild(actions, endButton);
-      var endGame = dom.createButton('End Game');
-      dom.setClass(endGame, 'actionButton');
-      dom.addListener(endGame, 'click', gameOver);
-      dom.addChild(actions, endGame);
+      dom.addChild(actions, escapeButton);
     }
   }, {
     key: "populateBackdrop",
@@ -437,6 +428,83 @@ function () {
       dom.setClass(again, 'actionButton');
       dom.addListener(again, 'click', playAgain);
       dom.addChild(actions, again);
+    }
+  }, {
+    key: "foundPotion",
+    value: function foundPotion() {
+      console.log('render found potion');
+      this.clearFloor();
+      var backdrop = dom.findByClass('.backdrop');
+      var end = dom.createEl();
+      dom.setClass(end, 'floorEnd');
+      dom.addChild(backdrop, end);
+      var found = dom.createEl();
+      dom.setHTML(found, "\n\t\t\t<h2>You found a potion!</h3>\n\t\t");
+      dom.addChild(end, found);
+      var portrait = dom.createEl();
+      dom.setClass(portrait, 'portrait');
+      dom.setBackground(portrait, 'healthPotion');
+      dom.addChild(end, portrait);
+      var accept = dom.createButton('Take it!');
+      dom.addListener(accept, 'click', takePotion);
+      dom.addChild(end, accept);
+    }
+  }, {
+    key: "foundWeapon",
+    value: function foundWeapon(newWeapon) {
+      this.clearFloor();
+      var backdrop = dom.findByClass('.backdrop');
+      var end = dom.createEl();
+      dom.setClass(end, 'floorEnd');
+      dom.addChild(backdrop, end);
+      var weaponQual = '';
+      var weapon = newWeapon;
+      var weaponName = '';
+
+      switch (weapon) {
+        case 6:
+          weaponQual = 'Poor';
+          weaponName = 'Wooden Sword';
+          break;
+
+        case 8:
+          weaponQual = 'Decent';
+          weaponName = 'Small Dagger';
+          break;
+
+        case 10:
+          weaponQual = 'Good';
+          weaponName = 'Iron Sword';
+          break;
+
+        case 12:
+          weaponQual = 'Great';
+          weaponName = 'Axe';
+          break;
+
+        case 20:
+          weaponQual = 'Awesome';
+          weaponName = 'Double Axe';
+          break;
+      }
+
+      var found = dom.createEl();
+      dom.setHTML(found, "\n\t\t\t<h2>You found a ".concat(weaponName, "!</h3>\n\t\t\t<h3>It's ").concat(weaponQual, " quality.</h3>\n\t\t"));
+      dom.addChild(end, found);
+      var portrait = dom.createEl();
+      dom.setClass(portrait, 'portrait');
+      dom.setBackground(portrait, weaponQual);
+      dom.addChild(end, portrait);
+      var accept = dom.createButton('Take it!');
+      dom.addListener(accept, 'click', function () {
+        return takeWeapon(weapon, weaponQual, weaponName);
+      });
+      var deny = dom.createButton('Leave it');
+      dom.addListener(deny, 'click', function () {
+        return takeWeapon(player.weapon, player.weaponQual, player.weaponType);
+      });
+      dom.addChild(end, accept);
+      dom.addChild(end, deny);
     }
   }]);
 

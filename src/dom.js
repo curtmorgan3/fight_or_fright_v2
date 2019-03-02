@@ -15,7 +15,9 @@ export default class Dom{
 		return document.createElement('div');
 	}
 	destroyEl(el){
-		return el.parentNode.removeChild(el);
+		if(el !== null){
+			return el.parentNode.removeChild(el);
+		}
 	}
 
 	setClass(parent, className){
@@ -27,6 +29,7 @@ export default class Dom{
 	}
 
 	setBackground(parent, image){
+		image = image.toLowerCase();
 		parent.style.backgroundImage = `url(images/${image}.png)`;
 	}
 	setBackgroundColor(parent, color){

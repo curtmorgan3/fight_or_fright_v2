@@ -6,6 +6,7 @@ var BattleField = function BattleField(turnOrder, monsters, floor) {
   this.turnOrder = turnOrder;
   this.monsters = monsters;
   this.floor = floor;
+  this.checkedForWeapon = false;
 };
 
 export { BattleField as default };

@@ -5,5 +5,6 @@ export default class BattleField{
 		this.turnOrder = turnOrder;
 		this.monsters = monsters;
 		this.floor = floor;
+		this.checkedForWeapon = false;
 	}
 }
