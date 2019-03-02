@@ -11,14 +11,18 @@ var floor = 1;
 var player = {};
 var monsters = [];
 var turnOrder = [];
-var battleField = {};
+var battleField = {}; // TODO: Chance for item drop between levels
+// TODO: Replace weapons
+// TODO: Resize Monster Sprites
+// TODO: Escape
+
 export function chooseCharacter(type) {
   player = new Character(type);
   render.name(player.type);
 }
 export function chooseName(name) {
   player.name = name;
-  render.prepare(player);
+  render.prepare(player, floor);
 }
 export function startFloor() {
   battleField = new BattleField(turnOrder, monsters, floor);
@@ -26,6 +30,8 @@ export function startFloor() {
   turnOrder = Helper.determineTurnOrder(player, monsters);
   battleField.monsters = monsters;
   battleField.turnOrder = turnOrder;
+  console.log('player', player);
+  console.log('monster', monsters);
   render.populateFloor(player, turnOrder, monsters);
   attackTurn();
 }
@@ -37,11 +43,25 @@ export function endFloor() {
   floor = battleField.floor;
   render.endFloor(newLevels);
 }
+export function resetFloor() {
+  var overlay = dom.findByClass('.overlay');
+  dom.destroyEl(overlay);
+
+  if (player.hp < player.maxHP / 2) {
+    player.hp = player.maxHP / 2;
+  }
+
+  ;
+  render.resetFloor();
+}
 export function gameOver() {
+  var overlay = dom.findByClass('.overlay');
+  dom.destroyEl(overlay);
   render.gameOver(player);
 }
 export function playAgain() {
   battleField.floor = 1;
+  floor = battleField.floor;
   player = {};
   turnOrder = [];
   render.clearFloor();
@@ -107,7 +127,6 @@ function _attackTurn() {
 
           case 17:
             if (i === battleField.turnOrder.length - 1) {
-              console.log('start again');
               attackTurn();
             }
 

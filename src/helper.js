@@ -63,14 +63,10 @@ export default class Helper{
 	}
 
 	static determineHit(attacker, defender){
-		console.log(attacker);
-		console.log(defender);
 		let attackRoll = this.d20() + attacker.getModifier(attacker.attributes.dex);
 		if(attackRoll > defender.attributes.ac){
-			console.log(`${attackRoll} > ${defender.attributes.ac}. Hit`);
 			return true;
 		}else{
-			console.log('Miss');
 			return false;
 		}
 	};
@@ -80,11 +76,16 @@ export default class Helper{
 		if (damage < 1){
 			damage = 1;
 		};
+		let coin = this.randNumber(2);
+		if(coin > 1){
+			damage ++;
+		}
+		console.log('damage', damage);
 		return damage;
 	};
 
 	static xp(player, monsterLevel){
-		let xp = (monsterLevel * this.randNumber(300) ) + (this.randNumber(100) * player.getModifier(player.attributes.luck));
+		let xp = (monsterLevel * this.randNumber(10) * 10 ) + (this.randNumber(10) * player.getModifier(player.attributes.luck));
 		if(xp < 1){
 			xp = 1;
 		}
@@ -106,7 +107,7 @@ export default class Helper{
   	}else{
 			return n;
 		}
-	}
+	};
 
 	static increaseSkill(skill, newLevels){
 		switch(skill){
@@ -146,7 +147,31 @@ export default class Helper{
 			}
 			break;
 		}
+		player.attributes.maxHP = player.attributes.maxHP + player.getModifier(player.attributes.fort);
+		player.hp = player.attributes.maxHP;
+		player.attributes.initiative = player.getModifier(player.attributes.speed) + 3;
 		render.endFloor(newLevels);
+	};
+
+	static tryToEscape(){
+		let roll = this.d20();
+		if(roll === 1){
+			return false;
+		}else if (roll === 20){
+			return true;
+		}else{
+			roll = roll + player.getModifier(player.attributes.speed);
+			let monsterSpeedAverage = 0;
+			battleField.monsters.forEach(monster => {
+				monsterSpeedAverage += monster.attributes.speed;
+			})
+			monsterSpeedAverage = monsterSpeedAverage / battleField.monsters.length;
+			if(roll > monsterSpeedAverage){
+				return true;
+			}else{
+				return false;
+			}
+		}
 	}
 
 }

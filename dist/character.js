@@ -3,7 +3,7 @@ import _asyncToGenerator from "@babel/runtime/helpers/asyncToGenerator";
 import _classCallCheck from "@babel/runtime/helpers/classCallCheck";
 import _createClass from "@babel/runtime/helpers/createClass";
 import Helper from './helper.js';
-import { render, dom, player, attackTurn, battleField, endFloor } from './app.js';
+import { render, dom, player, attackTurn, battleField, endFloor, resetFloor, gameOver } from './app.js';
 
 var Character =
 /*#__PURE__*/
@@ -14,7 +14,7 @@ function () {
     this.type = type;
     this.id = 'player';
     this.level = 1;
-    this.xp = 300;
+    this.xp = 0;
     this.attributes = this.attributes(type);
     this.inventory = ['potion', 'potion'];
     this.weaponType = 'Wooden Sword';
@@ -102,8 +102,8 @@ function () {
       }
 
       attributes.ac = this.getModifier(attributes.speed) + 10;
-      attributes.initiative = this.getModifier(attributes.speed) + 5;
-      attributes.maxHP = attributes.maxHP + 10 + this.getModifier(attributes.fort);
+      attributes.initiative = this.getModifier(attributes.speed) + 3;
+      attributes.maxHP = attributes.maxHP + 5 + this.getModifier(attributes.fort);
       return attributes;
     } // Instance Methods
 
@@ -229,13 +229,74 @@ function () {
     }()
   }, {
     key: "escape",
-    value: function escape() {
-      if (player.attacking) {
-        console.log('player escape');
-      } else {
-        console.log('Not players turn');
+    value: function () {
+      var _escape = _asyncToGenerator(
+      /*#__PURE__*/
+      _regeneratorRuntime.mark(function _callee2() {
+        var overlay, floor, escapeButton, didEscape;
+        return _regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                if (!player.attacking) {
+                  _context2.next = 23;
+                  break;
+                }
+
+                overlay = dom.createEl();
+                floor = dom.findByClass('.floor');
+                dom.setClass(overlay, 'overlay');
+                dom.addChild(floor, overlay);
+                escapeButton = dom.findById('escapeButton');
+                didEscape = Helper.tryToEscape();
+                dom.setText(escapeButton, 'Trying to escape...');
+                _context2.next = 10;
+                return Helper.sleep(3000);
+
+              case 10:
+                if (!didEscape) {
+                  _context2.next = 17;
+                  break;
+                }
+
+                dom.setText(escapeButton, 'Made it!');
+                _context2.next = 14;
+                return Helper.sleep(2000);
+
+              case 14:
+                resetFloor();
+                _context2.next = 21;
+                break;
+
+              case 17:
+                dom.setText(escapeButton, 'Oh no!!!');
+                _context2.next = 20;
+                return Helper.sleep(2000);
+
+              case 20:
+                gameOver();
+
+              case 21:
+                _context2.next = 24;
+                break;
+
+              case 23:
+                console.log('Not players turn');
+
+              case 24:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }));
+
+      function escape() {
+        return _escape.apply(this, arguments);
       }
-    }
+
+      return escape;
+    }()
   }]);
 
   return Character;

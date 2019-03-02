@@ -1,12 +1,12 @@
 import Helper from './helper.js';
-import {render, dom, player, attackTurn, battleField, endFloor} from './app.js';
+import {render, dom, player, attackTurn, battleField, endFloor, resetFloor, gameOver} from './app.js';
 
 export default class Character{
 	constructor(type){
 		this.type = type;
 		this.id = 'player';
 		this.level = 1;
-		this.xp = 300;
+		this.xp = 0;
 		this.attributes = this.attributes(type);
 		this.inventory = ['potion', 'potion'];
 		this.weaponType = 'Wooden Sword';
@@ -79,8 +79,8 @@ export default class Character{
 		}
 
 		attributes.ac = this.getModifier(attributes.speed) + 10;
-		attributes.initiative = this.getModifier(attributes.speed) + 5;
-		attributes.maxHP = attributes.maxHP + 10 + this.getModifier(attributes.fort);
+		attributes.initiative = this.getModifier(attributes.speed) + 3;
+		attributes.maxHP = attributes.maxHP + 5 + this.getModifier(attributes.fort);
 
 		return attributes;
 	}
@@ -150,9 +150,26 @@ export default class Character{
 		dom.destroyEl(overlay);
 	}
 
-	escape(){
+	async escape(){
 		if(player.attacking){
-			console.log('player escape');
+			let overlay = dom.createEl();
+			let floor = dom.findByClass('.floor');
+			dom.setClass(overlay, 'overlay');
+			dom.addChild(floor, overlay);
+
+			let escapeButton = dom.findById('escapeButton');
+			let didEscape = Helper.tryToEscape();
+			dom.setText(escapeButton, 'Trying to escape...');
+			await Helper.sleep(3000);
+			if(didEscape){
+				dom.setText(escapeButton, 'Made it!');
+				await Helper.sleep(2000);
+				resetFloor();
+			}else{
+				dom.setText(escapeButton, 'Oh no!!!');
+				await Helper.sleep(2000);
+				gameOver();
+			}
 		}else{
 			console.log('Not players turn');
 		}

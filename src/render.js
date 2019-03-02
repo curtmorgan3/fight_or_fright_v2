@@ -186,7 +186,7 @@ export default class Render{
 
 	// Prepare for horror!
 
-	prepare(player){
+	prepare(player, floor){
 		let welcome = dom.findByClass('.welcome');
 		dom.clear(welcome);
 
@@ -208,7 +208,7 @@ export default class Render{
 				<h3>Strength: ${player.attributes.str} / Speed: ${player.attributes.speed} / Dexterity: ${player.attributes.dex}</h3>
 				<h3>Fortitude: ${player.attributes.fort} / Luck: ${player.attributes.luck} / Max HP: ${player.attributes.maxHP}</h3>
 				<h3>Weapon: ${player.weaponType} / Quality: ${player.weapon}
-				<h2>Floor ${battleField.floor}</h2>
+				<h2>Floor ${floor}</h2>
 			`
 		)
 
@@ -386,7 +386,14 @@ export default class Render{
 
 		let end = dom.createEl();
 		dom.setClass(end, 'floorEnd');
-		if(newLevels > 0){
+		if(newLevels === 1){
+			dom.setHTML(end, `
+				<h2>You leveled up ${newLevels} time!</h2>
+				<h3>Add one point to your skills per level (your special skill will go up by two!)</h3>
+			`);
+			dom.addChild(backdrop, end);
+			this.levelUp(newLevels);
+		}else if(newLevels > 1){
 			dom.setHTML(end, `
 				<h2>You leveled up ${newLevels} times!</h2>
 				<h3>Add one point to your skills per level (your special skill will go up by two!)</h3>
@@ -405,6 +412,27 @@ export default class Render{
 			dom.addListener(cont, 'click', startFloor);
 			dom.addChild(actions, cont);
 		}
+
+	}
+
+	resetFloor(){
+		this.clearFloor();
+		let backdrop = dom.findByClass('.backdrop');
+		let actions = dom.findByClass('.actions');
+
+		let end = dom.createEl();
+		dom.setClass(end, 'floorEnd');
+
+		dom.setHTML(end, `
+			<h2>Escaped!</h2>
+			<h3>If your health was low, it's been restored a bit. Don't give up!</h3>
+		`);
+		dom.addChild(backdrop, end);
+
+		let cont = dom.createButton('Get back in the fight!');
+		dom.setClass(cont, 'actionButton');
+		dom.addListener(cont, 'click', startFloor);
+		dom.addChild(actions, cont);
 
 	}
 

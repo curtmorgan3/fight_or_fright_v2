@@ -197,7 +197,7 @@ function () {
 
   }, {
     key: "prepare",
-    value: function prepare(player) {
+    value: function prepare(player, floor) {
       var welcome = dom.findByClass('.welcome');
       dom.clear(welcome);
       var prepareWrapper = dom.createEl();
@@ -210,7 +210,7 @@ function () {
       var stats = dom.createEl();
       dom.setClass(stats, 'prepareStats');
       dom.addChild(prepareWrapper, stats);
-      dom.setHTML(stats, "\n\t\t\t\t<h2>".concat(player.name, ", Level ").concat(player.level, " ").concat(player.type, "</h2>\n\t\t\t\t<h3>Strength: ").concat(player.attributes.str, " / Speed: ").concat(player.attributes.speed, " / Dexterity: ").concat(player.attributes.dex, "</h3>\n\t\t\t\t<h3>Fortitude: ").concat(player.attributes.fort, " / Luck: ").concat(player.attributes.luck, " / Max HP: ").concat(player.attributes.maxHP, "</h3>\n\t\t\t\t<h3>Weapon: ").concat(player.weaponType, " / Quality: ").concat(player.weapon, "\n\t\t\t\t<h2>Floor ").concat(battleField.floor, "</h2>\n\t\t\t"));
+      dom.setHTML(stats, "\n\t\t\t\t<h2>".concat(player.name, ", Level ").concat(player.level, " ").concat(player.type, "</h2>\n\t\t\t\t<h3>Strength: ").concat(player.attributes.str, " / Speed: ").concat(player.attributes.speed, " / Dexterity: ").concat(player.attributes.dex, "</h3>\n\t\t\t\t<h3>Fortitude: ").concat(player.attributes.fort, " / Luck: ").concat(player.attributes.luck, " / Max HP: ").concat(player.attributes.maxHP, "</h3>\n\t\t\t\t<h3>Weapon: ").concat(player.weaponType, " / Quality: ").concat(player.weapon, "\n\t\t\t\t<h2>Floor ").concat(floor, "</h2>\n\t\t\t"));
       var submit = dom.createButton('Enter...');
       dom.addListener(submit, 'click', startFloor);
       dom.addChild(prepareWrapper, submit);
@@ -391,7 +391,11 @@ function () {
       var end = dom.createEl();
       dom.setClass(end, 'floorEnd');
 
-      if (newLevels > 0) {
+      if (newLevels === 1) {
+        dom.setHTML(end, "\n\t\t\t\t<h2>You leveled up ".concat(newLevels, " time!</h2>\n\t\t\t\t<h3>Add one point to your skills per level (your special skill will go up by two!)</h3>\n\t\t\t"));
+        dom.addChild(backdrop, end);
+        this.levelUp(newLevels);
+      } else if (newLevels > 1) {
         dom.setHTML(end, "\n\t\t\t\t<h2>You leveled up ".concat(newLevels, " times!</h2>\n\t\t\t\t<h3>Add one point to your skills per level (your special skill will go up by two!)</h3>\n\t\t\t"));
         dom.addChild(backdrop, end);
         this.levelUp(newLevels);
@@ -403,6 +407,21 @@ function () {
         dom.addListener(cont, 'click', startFloor);
         dom.addChild(actions, cont);
       }
+    }
+  }, {
+    key: "resetFloor",
+    value: function resetFloor() {
+      this.clearFloor();
+      var backdrop = dom.findByClass('.backdrop');
+      var actions = dom.findByClass('.actions');
+      var end = dom.createEl();
+      dom.setClass(end, 'floorEnd');
+      dom.setHTML(end, "\n\t\t\t<h2>Escaped!</h2>\n\t\t\t<h3>If your health was low, it's been restored a bit. Don't give up!</h3>\n\t\t");
+      dom.addChild(backdrop, end);
+      var cont = dom.createButton('Get back in the fight!');
+      dom.setClass(cont, 'actionButton');
+      dom.addListener(cont, 'click', startFloor);
+      dom.addChild(actions, cont);
     }
   }, {
     key: "gameOver",

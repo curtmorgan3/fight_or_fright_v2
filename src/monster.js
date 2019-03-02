@@ -38,7 +38,7 @@ export default class Monster{
 	}
 
 	getModifier(n){
-		let mod = -5;
+		let mod = -2;
   	for (let i = 1; i<n; i+= 2){
     	mod += 1;
 	  }
@@ -71,8 +71,8 @@ export default class Monster{
 		}
 		let diff = this.level - playerLevel;
 		attributes.ac = this.getModifier(attributes.speed) + 10 + diff;
-		attributes.initiative = this.getModifier(attributes.speed) + 5 + diff;
-		attributes.maxHP = attributes.maxHP + 5 + this.getModifier(attributes.fort) + diff;
+		attributes.initiative = this.getModifier(attributes.speed) + 5;
+		attributes.maxHP = attributes.maxHP + 2 + this.getModifier(attributes.fort) + diff;
 		if(attributes.maxHP < 2){
 			attributes.maxHP = 2;
 		}
@@ -81,7 +81,19 @@ export default class Monster{
 	}
 
 	setWeapon(){
-		return Math.ceil(Helper.randNumber(this.attributes.str) / 2);
+		let highMargin = 0;
+		if(this.level < 3){
+			highMargin = 4;
+		}else if (this.level > 3 && this.level < 8){
+			highMargin = 7;
+		}else if (this.level > 8 && this.level < 12){
+			highMargin = 10;
+		}else if (this.level > 12 && this.level < 15){
+			highMargin = 13;
+		}else{
+			highMargin = 16;
+		}
+		return Helper.randNumber(highMargin);
 	}
 
 	async attack(){
@@ -98,6 +110,7 @@ export default class Monster{
 			render.populatePlayerRow(player);
 			dom.setText(banner, `Hit! ${damage} damage.`);
 			if(player.hp < 1){
+				await Helper.sleep(2000);
 				gameOver();
 			}
 		}else{

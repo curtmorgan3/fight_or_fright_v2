@@ -109,15 +109,11 @@ function () {
   }, {
     key: "determineHit",
     value: function determineHit(attacker, defender) {
-      console.log(attacker);
-      console.log(defender);
       var attackRoll = this.d20() + attacker.getModifier(attacker.attributes.dex);
 
       if (attackRoll > defender.attributes.ac) {
-        console.log("".concat(attackRoll, " > ").concat(defender.attributes.ac, ". Hit"));
         return true;
       } else {
-        console.log('Miss');
         return false;
       }
     }
@@ -131,12 +127,19 @@ function () {
       }
 
       ;
+      var coin = this.randNumber(2);
+
+      if (coin > 1) {
+        damage++;
+      }
+
+      console.log('damage', damage);
       return damage;
     }
   }, {
     key: "xp",
     value: function xp(player, monsterLevel) {
-      var xp = monsterLevel * this.randNumber(300) + this.randNumber(100) * player.getModifier(player.attributes.luck);
+      var xp = monsterLevel * this.randNumber(10) * 10 + this.randNumber(10) * player.getModifier(player.attributes.luck);
 
       if (xp < 1) {
         xp = 1;
@@ -211,7 +214,34 @@ function () {
           break;
       }
 
+      player.attributes.maxHP = player.attributes.maxHP + player.getModifier(player.attributes.fort);
+      player.hp = player.attributes.maxHP;
+      player.attributes.initiative = player.getModifier(player.attributes.speed) + 3;
       render.endFloor(newLevels);
+    }
+  }, {
+    key: "tryToEscape",
+    value: function tryToEscape() {
+      var roll = this.d20();
+
+      if (roll === 1) {
+        return false;
+      } else if (roll === 20) {
+        return true;
+      } else {
+        roll = roll + player.getModifier(player.attributes.speed);
+        var monsterSpeedAverage = 0;
+        battleField.monsters.forEach(function (monster) {
+          monsterSpeedAverage += monster.attributes.speed;
+        });
+        monsterSpeedAverage = monsterSpeedAverage / battleField.monsters.length;
+
+        if (roll > monsterSpeedAverage) {
+          return true;
+        } else {
+          return false;
+        }
+      }
     }
   }]);
 

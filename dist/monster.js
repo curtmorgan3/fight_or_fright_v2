@@ -52,7 +52,7 @@ function () {
   }, {
     key: "getModifier",
     value: function getModifier(n) {
-      var mod = -5;
+      var mod = -2;
 
       for (var i = 1; i < n; i += 2) {
         mod += 1;
@@ -100,8 +100,8 @@ function () {
 
       var diff = this.level - playerLevel;
       attributes.ac = this.getModifier(attributes.speed) + 10 + diff;
-      attributes.initiative = this.getModifier(attributes.speed) + 5 + diff;
-      attributes.maxHP = attributes.maxHP + 5 + this.getModifier(attributes.fort) + diff;
+      attributes.initiative = this.getModifier(attributes.speed) + 5;
+      attributes.maxHP = attributes.maxHP + 2 + this.getModifier(attributes.fort) + diff;
 
       if (attributes.maxHP < 2) {
         attributes.maxHP = 2;
@@ -112,7 +112,21 @@ function () {
   }, {
     key: "setWeapon",
     value: function setWeapon() {
-      return Math.ceil(Helper.randNumber(this.attributes.str) / 2);
+      var highMargin = 0;
+
+      if (this.level < 3) {
+        highMargin = 4;
+      } else if (this.level > 3 && this.level < 8) {
+        highMargin = 7;
+      } else if (this.level > 8 && this.level < 12) {
+        highMargin = 10;
+      } else if (this.level > 12 && this.level < 15) {
+        highMargin = 13;
+      } else {
+        highMargin = 16;
+      }
+
+      return Helper.randNumber(highMargin);
     }
   }, {
     key: "attack",
@@ -132,7 +146,7 @@ function () {
                 hit = Helper.determineHit(this, player);
 
                 if (!hit) {
-                  _context.next = 15;
+                  _context.next = 18;
                   break;
                 }
 
@@ -145,28 +159,36 @@ function () {
                 render.populatePlayerRow(player);
                 dom.setText(banner, "Hit! ".concat(damage, " damage."));
 
-                if (player.hp < 1) {
-                  gameOver();
+                if (!(player.hp < 1)) {
+                  _context.next = 16;
+                  break;
                 }
 
-                _context.next = 18;
-                break;
-
-              case 15:
-                _context.next = 17;
+                _context.next = 15;
                 return Helper.sleep(2000);
 
-              case 17:
-                dom.setText(banner, 'Miss!');
+              case 15:
+                gameOver();
+
+              case 16:
+                _context.next = 21;
+                break;
 
               case 18:
                 _context.next = 20;
-                return Helper.sleep(1000);
+                return Helper.sleep(2000);
 
               case 20:
-                dom.setText(banner, '');
+                dom.setText(banner, 'Miss!');
 
               case 21:
+                _context.next = 23;
+                return Helper.sleep(1000);
+
+              case 23:
+                dom.setText(banner, '');
+
+              case 24:
               case "end":
                 return _context.stop();
             }
