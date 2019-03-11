@@ -11,9 +11,7 @@ var floor = 1;
 var player = {};
 var monsters = [];
 var turnOrder = [];
-var battleField = {}; // TODO: Chance for item drop between levels
-// TODO: Replace weapons
-
+var battleField = {};
 export function chooseCharacter(type) {
   player = new Character(type);
   render.name(player.type);
@@ -40,17 +38,12 @@ export function endFloor() {
     var foundNewWeapon = Helper.chanceFoundWeapon();
 
     if (!foundNewWeapon) {
-      console.log('didnt find weapon');
       var foundPotion = Helper.chanceFoundPotion(); // Found a potion
 
-      console.log('inven', player.inventory);
-
       if (foundPotion && player.inventory.length < 2) {
-        console.log('found potion');
         battleField.foundPotion = true;
         render.foundPotion();
       } else {
-        console.log('found nothing');
         var newLevels = Helper.checkLevelUp(0);
         battleField.floor = battleField.floor + 1;
         floor = battleField.floor;

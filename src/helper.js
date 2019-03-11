@@ -175,7 +175,6 @@ export default class Helper{
 
 	static chanceFoundWeapon(){
 		let chance = this.randNumber(100) + player.getModifier(player.attributes.luck);
-		console.log('chance found weapon ', chance);
 		if(chance > 50){
 			return true;
 		}else{
@@ -200,7 +199,6 @@ export default class Helper{
 
 	static chanceFoundPotion(){
 		let chance = this.randNumber(100) + player.getModifier(player.attributes.luck);
-		console.log('chance found potion ', chance);
 		if(chance > 50){
 			return true;
 		}else{

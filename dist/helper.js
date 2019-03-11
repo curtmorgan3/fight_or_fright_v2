@@ -245,14 +245,13 @@ function () {
   }, {
     key: "chanceFoundWeapon",
     value: function chanceFoundWeapon() {
-      // let chance = this.randNumber(100) + player.getModifier(player.attributes.luck);
-      // console.log('chance found weapon ', chance);
-      // if(chance > 50){
-      // 	return true;
-      // }else{
-      // 	return false;
-      // }
-      return false;
+      var chance = this.randNumber(100) + player.getModifier(player.attributes.luck);
+
+      if (chance > 50) {
+        return true;
+      } else {
+        return false;
+      }
     }
   }, {
     key: "newWeapon",
@@ -274,14 +273,13 @@ function () {
   }, {
     key: "chanceFoundPotion",
     value: function chanceFoundPotion() {
-      // let chance = this.randNumber(100) + player.getModifier(player.attributes.luck);
-      // console.log('chance found potion ', chance);
-      // if(chance > 50){
-      // 	return true;
-      // }else{
-      // 	return false;
-      // }
-      return true;
+      var chance = this.randNumber(100) + player.getModifier(player.attributes.luck);
+
+      if (chance > 50) {
+        return true;
+      } else {
+        return false;
+      }
     }
   }]);
 

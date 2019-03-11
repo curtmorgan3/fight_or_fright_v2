@@ -39,16 +39,12 @@ export function endFloor(){
 		battleField.checkedForWeapon = true;
 		let foundNewWeapon = Helper.chanceFoundWeapon();
 		if(!foundNewWeapon){
-			console.log('didnt find weapon');
 			let foundPotion = Helper.chanceFoundPotion();
 		// Found a potion
-			console.log('inven', player.inventory);
 			if(foundPotion && player.inventory.length < 2){
-				console.log('found potion');
 				battleField.foundPotion = true;
 				render.foundPotion();
 			}else{
-				console.log('found nothing');
 				let newLevels = Helper.checkLevelUp(0);
 				battleField.floor = battleField.floor + 1;
 				floor = battleField.floor;
