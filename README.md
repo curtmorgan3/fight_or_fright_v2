@@ -7,7 +7,7 @@ This is a browser role playing game built entirely in vanilla JavaScript, HTML a
 
 [Play Now!](http://fight-orfright.surge.sh)
 
-This is Version 2 of Fight or Fright, version one can be found here: https://github.com/curtmorgan3/fight_or_fright
+This is Version 2 of Fight or Fright, Version 1 can be found here: https://github.com/curtmorgan3/fight_or_fright
 
 Version 2 is a complete rework of the game to make it faster and more stable. It's written in ES6 JavaScript, with Babel and Webpack used to compile for the browser.
 
